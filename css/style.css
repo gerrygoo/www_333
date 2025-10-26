@@ -1,0 +1,46 @@
+/* General Body Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Hero Section Styles (Mobile First) */
+.hero {
+    padding: 4rem 1rem;
+    text-align: center;
+}
+
+.hero__logo {
+    font-size: 2.5rem;
+    margin: 0 0 1rem 0;
+    font-weight: 700;
+}
+
+.hero__tagline {
+    font-size: 1.1rem;
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Desktop Styles */
+@media (min-width: 768px) {
+    html, body {
+        height: 100%;
+    }
+
+    .hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 50vh;
+        padding: 0 2rem;
+    }
+
+    .hero__logo {
+        font-size: 4rem;
+    }
+}

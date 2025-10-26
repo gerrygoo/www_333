@@ -4,6 +4,48 @@ body {
     background-color: #000000;
     color: #ffffff;
     line-height: 1.6;
+    position: relative;
+
+    /*
+      Old Film Effect:
+      A stack of non-repeating gradients to simulate scratches and dust.
+      Each layer is a distinct artifact, positioned manually.
+    */
+    background-image:
+        /* --- Scratches --- */
+        linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.1) 10%, rgba(255,255,255,0.1) 90%, transparent 100%),
+        linear-gradient(180deg, transparent 30%, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0.3) 60%, transparent 70%),
+        linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.05) 5%, rgba(255,255,255,0.05) 95%, transparent 100%),
+
+        /* --- Dust & Specks --- */
+        radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 3px),
+        radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 2px),
+        radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 4px);
+
+    background-repeat: no-repeat;
+
+    background-size:
+        /* Scratches */
+        1px 100%,
+        2px 200px,
+        1px 80%,
+        /* Dust */
+        10px 10px,
+        8px 8px,
+        5px 5px,
+        12px 12px;
+
+    background-position:
+        /* Scratches */
+        left 10% top 0,
+        right 25% top 150px,
+        right 12% top 0,
+        /* Dust */
+        left 5% top 5%,
+        right 3% bottom 10%,
+        left 2% top 50%,
+        right 6% top 8%;
 }
 
 /* Hero Section Styles (Mobile First) */

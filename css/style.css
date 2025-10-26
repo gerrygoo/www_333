@@ -12,40 +12,78 @@ body {
       Each layer is a distinct artifact, positioned manually.
     */
     background-image:
-        /* --- Scratches --- */
+        /* --- MORE NOTICEABLE ARTIFACTS --- */
+        /* Thick scratch */
+        linear-gradient(180deg, transparent 20%, rgba(255,255,255,0.4) 45%, rgba(255,255,255,0.4) 55%, transparent 80%),
+        /* Large dust blotch */
+        radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 10px),
+        /* MOVED: Long, brighter scratch */
+        linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.2) 5%, rgba(255,255,255,0.2) 95%, transparent 100%),
+
+        /* --- ORIGINAL SUBTLE ARTIFACTS --- */
         linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.1) 10%, rgba(255,255,255,0.1) 90%, transparent 100%),
         linear-gradient(180deg, transparent 30%, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0.3) 60%, transparent 70%),
         linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.05) 5%, rgba(255,255,255,0.05) 95%, transparent 100%),
-
-        /* --- Dust & Specks --- */
         radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 3px),
         radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 2px),
         radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 1px),
-        radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 4px);
+        radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 4px),
+
+        /* --- MORE SUBTLE ARTIFACTS --- */
+        radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 2px),
+        linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.1) 60%, transparent 100%),
+
+        /* --- NEW LARGE DOTS --- */
+        radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 8px),
+        radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 12px),
+        radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 5px);
 
     background-repeat: no-repeat;
 
     background-size:
-        /* Scratches */
+        /* More noticeable */
+        3px 150px,
+        30px 30px,
+        1px 100%,
+        /* Original */
         1px 100%,
         2px 200px,
         1px 80%,
-        /* Dust */
         10px 10px,
         8px 8px,
         5px 5px,
-        12px 12px;
+        12px 12px,
+        /* More subtle */
+        6px 6px,
+        7px 7px,
+        1px 50%,
+        /* New large dots */
+        25px 25px,
+        30px 30px,
+        15px 15px;
 
     background-position:
-        /* Scratches */
+        /* More noticeable */
+        right 5% top 300px,
+        left 20% top 100px,
+        left 20% top 0, /* MOVED from center */
+        /* Original */
         left 10% top 0,
         right 25% top 150px,
         right 12% top 0,
-        /* Dust */
         left 5% top 5%,
         right 3% bottom 10%,
         left 2% top 50%,
-        right 6% top 8%;
+        right 6% top 8%,
+        /* More subtle */
+        right 15% bottom 15%,
+        left 18% top 60%,
+        left 30% top 0,
+        /* New large dots */
+        right 10% bottom 25%,
+        left 8% top 20%,
+        right 5% top 55%;
 }
 
 /* Hero Section Styles (Mobile First) */

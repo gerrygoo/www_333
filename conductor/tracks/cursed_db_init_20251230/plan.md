@@ -1,7 +1,7 @@
 # Track Plan: Initialize "Cursed Database" Portfolio and Core Visual Effects
 
 ## Phase 1: Core Visual Effects Implementation
-- [ ] Task: Create specific CSS classes for "film grain", "scratches", and "scanlines" in `css/style.css` using pseudo-elements and background patterns.
+- [x] Task: Create specific CSS classes for "film grain", "scratches", and "scanlines" in `css/style.css` using pseudo-elements and background patterns. [fc0bf3b]
 - [ ] Task: Apply these visual effect classes to `index.html` and verify the "cursed" aesthetic on desktop.
 - [ ] Task: Implement a basic "glitch" animation for the main logo or heading on `index.html`.
 - [ ] Task: Conductor - User Manual Verification 'Core Visual Effects Implementation' (Protocol in workflow.md)

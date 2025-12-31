@@ -352,3 +352,21 @@ footer {
 .glitch {
   animation: glitch 725ms infinite;
 }
+
+/* --- LOW-FI ADAPTIVE OVERRIDES --- */
+
+.low-fi .film-grain::before,
+.low-fi .scratches::after,
+.low-fi .scanlines::before {
+    animation: none !important;
+    display: none !important;
+}
+
+.low-fi .glitch {
+    animation: none !important;
+    text-shadow: none !important;
+}
+
+.low-fi body {
+    background-image: none !important; /* Remove the static grain/scratches background too */
+}

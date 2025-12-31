@@ -176,3 +176,10 @@ body {
     font-size: 1.5rem; /* Increased font size */
     font-weight: bold;
 }
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    padding-bottom: 8rem; /* Ensure space for fixed banner */
+}

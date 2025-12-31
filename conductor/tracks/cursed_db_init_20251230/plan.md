@@ -7,8 +7,8 @@
 - [x] Task: Conductor - User Manual Verification 'Core Visual Effects Implementation' (Protocol in workflow.md) [d615d09]
 
 ## Phase 2: Adaptive Performance Logic
-- [ ] Task: Create `js/main.js` and implement a function to check for `prefers-reduced-motion` and simple device performance signals (e.g., user agent or screen size as a proxy if hardware concurrency is unreliable).
-- [ ] Task: Add logic to `js/main.js` to conditionally toggle a `.low-fi` class on the `<body>` that disables or simplifies complex CSS filters/animations.
+- [x] Task: Create `js/main.js` and implement a function to check for `prefers-reduced-motion` and simple device performance signals (e.g., user agent or screen size as a proxy if hardware concurrency is unreliable). [453c7c3]
+- [x] Task: Add logic to `js/main.js` to conditionally toggle a `.low-fi` class on the `<body>` that disables or simplifies complex CSS filters/animations. [453c7c3]
 - [ ] Task: Update `css/style.css` to define simpler overrides for `.low-fi` mode (e.g., remove grain, stop constant animation).
 - [ ] Task: Conductor - User Manual Verification 'Adaptive Performance Logic' (Protocol in workflow.md)
 

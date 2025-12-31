@@ -14,13 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Check for reduced motion preference
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         
-        // 2. Simple device proxy: Screen width (mobile devices often have less GPU power for complex CSS filters)
-        const isSmallScreen = window.innerWidth <= 768;
+        // 2. Hardware Concurrency
+        const lowCoreCount = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
 
-        // 3. Hardware Concurrency (optional, but a good signal if available)
-        const lowCoreCount = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+        if (prefersReducedMotion) {
+            console.log('PDI: Reduced motion preference detected.');
+        }
+        if (lowCoreCount) {
+            console.log(`PDI: Low core count detected (${navigator.hardwareConcurrency}).`);
+        }
 
-        return prefersReducedMotion || isSmallScreen || lowCoreCount;
+        return prefersReducedMotion || lowCoreCount;
     }
 
     if (checkPerformanceSignals()) {

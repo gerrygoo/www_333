@@ -6,11 +6,11 @@
 - [x] Task: Implement a basic "glitch" animation for the main logo or heading on `index.html`. [849e997]
 - [x] Task: Conductor - User Manual Verification 'Core Visual Effects Implementation' (Protocol in workflow.md) [d615d09]
 
-## Phase 2: Adaptive Performance Logic
+## Phase 2: Adaptive Performance Logic [checkpoint: 8f06e6f]
 - [x] Task: Create `js/main.js` and implement a function to check for `prefers-reduced-motion` and simple device performance signals (e.g., user agent or screen size as a proxy if hardware concurrency is unreliable). [453c7c3]
 - [x] Task: Add logic to `js/main.js` to conditionally toggle a `.low-fi` class on the `<body>` that disables or simplifies complex CSS filters/animations. [453c7c3]
 - [x] Task: Update `css/style.css` to define simpler overrides for `.low-fi` mode (e.g., remove grain, stop constant animation). [38f8a9e]
-- [~] Task: Conductor - User Manual Verification 'Adaptive Performance Logic' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Adaptive Performance Logic' (Protocol in workflow.md) [8f06e6f]
 
 ## Phase 3: "Data List" Portfolio Structure
 - [ ] Task: Design the HTML structure for a single "Project Record" using semantic definition lists (`<dl>`) or unsorted lists (`<ul>`) in `demoreel.html`.

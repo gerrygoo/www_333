@@ -1,3 +1,39 @@
+/* Fonts */
+@font-face {
+    font-family: 'Mustasurma';
+    src: url('../fonts/mustasurma_font.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Overconsumption';
+    src: url('../fonts/overconsumption_font.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Terminal Grotesque';
+    src: url('../fonts/terminal_grotesque_font.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'WordsWithA';
+    src: url('../fonts/words_with_a_as_third_letter.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YellowWhiteOpozzum';
+    src: url('../fonts/yellow_white_opozzum_regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* General Body Styles */
 body {
     font-family: "Courier New", Courier, monospace;
@@ -182,4 +218,90 @@ footer {
     text-align: center;
     padding: 2rem 1rem;
     padding-bottom: 8rem; /* Ensure space for fixed banner */
+}
+
+/* --- VISUAL EFFECTS --- */
+
+.film-grain {
+    position: relative;
+    overflow: hidden;
+}
+
+.film-grain::before {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    /* Noise pattern SVG data URI */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.15;
+    pointer-events: none;
+    animation: grain 8s steps(10) infinite;
+    z-index: 10;
+    mix-blend-mode: overlay;
+}
+
+@keyframes grain {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-5%, -10%); }
+    20% { transform: translate(-15%, 5%); }
+    30% { transform: translate(7%, -25%); }
+    40% { transform: translate(-5%, 25%); }
+    50% { transform: translate(-15%, 10%); }
+    60% { transform: translate(15%, 0%); }
+    70% { transform: translate(0%, 15%); }
+    80% { transform: translate(3%, 35%); }
+    90% { transform: translate(-10%, 10%); }
+}
+
+.scratches {
+    position: relative;
+}
+
+.scratches::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-image:
+        linear-gradient(180deg, transparent 20%, rgba(255,255,255,0.4) 45%, rgba(255,255,255,0.4) 55%, transparent 80%),
+        linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.2) 5%, rgba(255,255,255,0.2) 95%, transparent 100%);
+    background-size: 3px 150px, 1px 100%;
+    background-position: left 20% top 0, right 12% top 0;
+    background-repeat: no-repeat;
+    animation: scratches 2s infinite steps(1);
+    z-index: 11;
+    opacity: 0.3;
+}
+
+@keyframes scratches {
+    0% { background-position: left 20% top 0, right 12% top 0; }
+    25% { background-position: left 80% top 100px, right 5% top 50px; }
+    50% { background-position: left 40% top 200px, right 90% top 10px; }
+    75% { background-position: left 10% top 50px, right 60% top 100px; }
+    100% { background-position: left 20% top 0, right 12% top 0; }
+}
+
+.scanlines {
+    position: relative;
+}
+
+.scanlines::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+    background-size: 100% 4px;
+    z-index: 12;
+    pointer-events: none;
+    opacity: 0.6;
 }

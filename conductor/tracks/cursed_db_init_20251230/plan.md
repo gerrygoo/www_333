@@ -12,9 +12,9 @@
 - [x] Task: Update `css/style.css` to define simpler overrides for `.low-fi` mode (e.g., remove grain, stop constant animation). [38f8a9e]
 - [x] Task: Conductor - User Manual Verification 'Adaptive Performance Logic' (Protocol in workflow.md) [8f06e6f]
 
-## Phase 3: "Data List" Portfolio Structure
-- [ ] Task: Design the HTML structure for a single "Project Record" using semantic definition lists (`<dl>`) or unsorted lists (`<ul>`) in `demoreel.html`.
-- [ ] Task: Populate `demoreel.html` with three mock entries: "Project A", "Project B", and "Project C", including fields for Client, Date, and Status.
-- [ ] Task: Style the list entries in `css/style.css` to look like a raw, industrial database (monospaced font, rigid grid, raw borders).
-- [ ] Task: Add a hover effect to list items that reveals a "corrupted" or "decoded" state (e.g., text color inversion or slight offset).
-- [ ] Task: Conductor - User Manual Verification 'Data List Portfolio Structure' (Protocol in workflow.md)
+## Phase 3: "Data List" Portfolio Structure [checkpoint: 64792f9]
+- [x] Task: Design the HTML structure for a single "Project Record" using semantic definition lists (`<dl>`) or unsorted lists (`<ul>`) in `demoreel.html`. [8dfb3bf]
+- [x] Task: Populate `demoreel.html` with three mock entries: "Project A", "Project B", and "Project C", including fields for Client, Date, and Status. [3f77ac0]
+- [x] Task: Style the list entries in `css/style.css` to look like a raw, industrial database (monospaced font, rigid grid, raw borders). [907cf82]
+- [x] Task: Add a hover effect to list items that reveals a "corrupted" or "decoded" state (e.g., text color inversion or slight offset). [907cf82]
+- [x] Task: Conductor - User Manual Verification 'Data List Portfolio Structure' (Protocol in workflow.md) [64792f9]

@@ -73,7 +73,8 @@ body {
         /* --- NEW LARGE DOTS --- */
         radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 8px),
         radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 12px),
-        radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 5px);
+        radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 5px),
+        url('../images/textures/texturelabs_vector_136.svg');
 
     background-repeat: no-repeat;
 
@@ -97,7 +98,8 @@ body {
         /* New large dots */
         25px 25px,
         30px 30px,
-        15px 15px;
+        15px 15px,
+        50% auto;
 
     background-position:
         /* More noticeable */
@@ -119,7 +121,8 @@ body {
         /* New large dots */
         right 10% bottom 25%,
         left 8% top 20%,
-        right 5% top 55%;
+        right 5% top 55%,
+        center center;
 }
 
 /* Hero Section Styles (Mobile First) */

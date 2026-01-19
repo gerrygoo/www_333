@@ -138,6 +138,7 @@ body {
 }
 
 .hero__tagline {
+    font-family: 'Terminal Grotesque', "Courier New", Courier, monospace;
     font-size: 1.1rem;
     color: #ffffff;
     max-width: 600px;

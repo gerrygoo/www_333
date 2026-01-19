@@ -13,6 +13,6 @@
 - [x] Task: Conductor - User Manual Verification 'Brand Assets Integration' (Protocol in workflow.md) [42fa2a8]
 
 ## Phase 3: Polish & Refinement
-- [ ] Task: Review font usage (`Terminal Grotesque`, `Overconsumption`) in the context of the new graphical logo and adjust CSS weights/sizes if necessary.
+- [~] Task: Review font usage (`Terminal Grotesque`, `Overconsumption`) in the context of the new graphical logo and adjust CSS weights/sizes if necessary.
 - [ ] Task: Verify that `favicon.ico`, `site.webmanifest`, and other icon assets are correctly linked in the HTML `<head>` and displaying properly.
 - [ ] Task: Conductor - User Manual Verification 'Polish & Refinement' (Protocol in workflow.md)

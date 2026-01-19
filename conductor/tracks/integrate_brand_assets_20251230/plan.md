@@ -6,11 +6,11 @@
 - [x] Task: Batch convert all remaining EPS assets to SVG using the verified Inkscape method. [38b2f42]
 - [x] Task: Conductor - User Manual Verification 'Asset Preparation & Conversion' (Protocol in workflow.md) [c0114c7]
 
-## Phase 2: Brand Assets Integration
+## Phase 2: Brand Assets Integration [checkpoint: 42fa2a8]
 - [x] Task: Replace the text-based `<h1 class="hero__logo">` in `index.html` with the official PDI logo image (prefer SVG if available, or high-res PNG). [04e2137]
 - [x] Task: Update `demoreel.html` header to use the graphic logo instead of text. [23714e3]
 - [x] Task: Update `css/style.css` to use the new vector symbols as decorative background elements or dividers (e.g., replacing generic CSS borders or adding to the "cursed" overlay). [210e22e]
-- [ ] Task: Conductor - User Manual Verification 'Brand Assets Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Brand Assets Integration' (Protocol in workflow.md) [42fa2a8]
 
 ## Phase 3: Polish & Refinement
 - [ ] Task: Review font usage (`Terminal Grotesque`, `Overconsumption`) in the context of the new graphical logo and adjust CSS weights/sizes if necessary.

@@ -1,7 +1,7 @@
 # Track Plan: Integrate Brand Identity and Visual Assets
 
 ## Phase 1: Asset Preparation & Conversion (Priority)
-- [ ] Task: Audit `images/symbols/` and `images/textures/` to list all EPS files requiring conversion and check if `inkscape` is available in the shell environment.
+- [x] Task: Audit `images/symbols/` and `images/textures/` to list all EPS files requiring conversion and check if `inkscape` is available in the shell environment. [eb06bf7]
 - [ ] Task: Develop and execute an Inkscape CLI command/script to convert a single EPS file to SVG as a proof-of-concept, verifying the "no cropping" requirement.
 - [ ] Task: Batch convert all remaining EPS assets to SVG using the verified Inkscape method.
 - [ ] Task: Conductor - User Manual Verification 'Asset Preparation & Conversion' (Protocol in workflow.md)

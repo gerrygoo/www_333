@@ -9,7 +9,7 @@
 ## Phase 2: Brand Assets Integration
 - [x] Task: Replace the text-based `<h1 class="hero__logo">` in `index.html` with the official PDI logo image (prefer SVG if available, or high-res PNG). [04e2137]
 - [x] Task: Update `demoreel.html` header to use the graphic logo instead of text. [23714e3]
-- [~] Task: Update `css/style.css` to use the new vector symbols as decorative background elements or dividers (e.g., replacing generic CSS borders or adding to the "cursed" overlay).
+- [x] Task: Update `css/style.css` to use the new vector symbols as decorative background elements or dividers (e.g., replacing generic CSS borders or adding to the "cursed" overlay). [210e22e]
 - [ ] Task: Conductor - User Manual Verification 'Brand Assets Integration' (Protocol in workflow.md)
 
 ## Phase 3: Polish & Refinement

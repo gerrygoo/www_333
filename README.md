@@ -15,3 +15,9 @@ This project is a simple, clean, and modern landing page for a production compan
 *   **File Structure:** Keep the project organized with dedicated folders for `css`, `images`, and `js`.
 *   **HTML:** Use semantic tags (`<header>`, `<nav>`, `<main>`, etc.) and provide `alt` text for all images.
 *   **CSS:** Follow a mobile-first approach and use a consistent naming convention for classes (e.g., BEM).
+
+## References
+
+- [Yvette's Bridal Formal](https://yvettesbridalformal.p1r8.net/default.html)
+- [Goma Xantana](https://gomaxantana.net)
+- [Habitant Productions](https://habitantproductions.mx)

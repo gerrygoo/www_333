@@ -13,8 +13,8 @@ A landing page for Paranormal Dynamics, Inc. with a "Cursed Database" / "Tech-No
 
 ## Key Features
 *   **Immersive Home Page:** High-impact landing page featuring "old film" effects, glitches, and raw text layouts.
-*   **"Data List" Portfolio:** A dedicated Demo Reel/Work section presenting projects as a raw, industrial database list.
-    *   *Implementation Note:* Will utilize mock projects (Project A, Project B, Project C) to build the UI structure in the absence of final assets.
+*   **"Data List" Portfolio:** A functional Demo Reel section (`demoreel.html`) presenting projects as a raw, industrial database list.
+    *   *Current State:* Populated with mock projects (Project A, B, C) featuring structured fields for Client, Date, and Status.
 *   **Interactive Elements:** "Cursed" interactions including marquees, hover-reveals, and "system status" indicators.
 
 ## Constraints & Technical Requirements

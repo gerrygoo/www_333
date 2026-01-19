@@ -24,6 +24,37 @@ The directory contains the following files and folders:
 -   `archival/`: Directory for source assets (e.g., `.ai` files) not intended for the web.
 -   **Favicon Assets**: `favicon.ico`, `site.webmanifest`, `apple-touch-icon.png`, `android-chrome-*.png`, `favicon-*.png` located in the root.
 
+## Design Research & Inspiration
+
+We are blending aesthetics from three distinct sources to create a "Cursed Database" / "Tech-Noir" vibe.
+
+### 1. Yvette's Bridal Formal (The "Outsider/Cursed" Influence)
+-   **Key Elements:** Chaos, centered text walls, repeated punctuation ("!! ~*"), raw HTML colors, low-fi GIF aesthetics, "Under Construction" vibes.
+-   **Takeaway:** embrace "wrong" design choices, use text dividers (`~*~*`), fake hit counters, and raw unpolished layouts.
+
+### 2. Goma Xantana (The "Modern/Tech-Noir" Influence)
+-   **Key Elements:** High contrast (Black/White), minimalist navigation, media-centric (large video/images), experimental layouts, "AI/Glitch" themes.
+-   **Takeaway:** Keep the core structure usable but edgy. Use large media and minimal UI chrome.
+
+### 3. Habitant Productions (The "Professional/Industrial" Influence)
+-   **Key Elements:** Grid-based lists (Director / Client / Time), live clocks, industrial monospace typography, raw data presentation.
+-   **Takeaway:** Use "Data Lists" for content (e.g., the Demo Reel). Present projects as "Files" or "Cases".
+
+### **Design Pillars for Paranormal Dynamics:**
+1.  **"Cursed Database" Aesthetic:** Structured data (lists, timecodes) corrupted by paranormal elements (glitches, weird symbols).
+2.  **Typography:** `Terminal Grotesque` / `Overconsumption` for headings (Display), `Courier`/Monospace for data (Body).
+3.  **Lo-Fi Interactivity:** Marquees, hover-reveal images, raw text links, "System Status" indicators.
+
+## Available Fonts
+
+The following custom fonts are configured in `css/style.css` and ready for use:
+
+-   `'Mustasurma'`
+-   `'Overconsumption'`
+-   `'Terminal Grotesque'`
+-   `'WordsWithA'`
+-   `'YellowWhiteOpozzum'`
+
 ## TODOs
 
 -   [ ] Configure GitHub Pages to ignore/exclude the `archival/` directory.

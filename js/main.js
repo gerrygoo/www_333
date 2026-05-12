@@ -5,12 +5,12 @@ const CONFIG = {
     GLITCH_DURATION: 800,
     SWAP_INTERVAL: 100,
     ORIGINAL_LOGO: 'images/logos/pdi_logo_v2.6_black.png',
-    WARP_AMBIENT: 6,
+    WARP_AMBIENT: 20,
     WARP_VELOCITY_FACTOR: 0.9,
-    WARP_MAX_SCALE: 35,
+    WARP_MAX_SCALE: 65,
     WARP_RADIUS_BASE: 140,
     WARP_RADIUS_VELOCITY_FACTOR: 0.4,
-    WARP_SEED_SPEED: 0.12,
+    WARP_SEED_SPEED: 0.03,
     WARP_SEED_VELOCITY_FACTOR: 0.18,
     WARP_RGB_BOOST_THRESHOLD: 3,
     WARP_RGB_BOOST_FACTOR: 0.08,
@@ -192,13 +192,13 @@ function initCursorWarp() {
         prevY = state.cursorY;
 
         const rawSpeed = Math.sqrt(dx * dx + dy * dy);
-        state.warpSpeed = state.warpSpeed + (rawSpeed - state.warpSpeed) * 0.15;
+        state.warpSpeed = state.warpSpeed + (rawSpeed - state.warpSpeed) * 0.08;
 
         const targetScale = Math.min(
             CONFIG.WARP_AMBIENT + state.warpSpeed * CONFIG.WARP_VELOCITY_FACTOR,
             CONFIG.WARP_MAX_SCALE
         );
-        state.warpScale = state.warpScale + (targetScale - state.warpScale) * 0.12;
+        state.warpScale = state.warpScale + (targetScale - state.warpScale) * 0.05;
 
         state.warpSeed += CONFIG.WARP_SEED_SPEED + state.warpSpeed * CONFIG.WARP_SEED_VELOCITY_FACTOR;
         const seed = Math.floor(state.warpSeed) % 999;

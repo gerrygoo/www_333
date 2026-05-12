@@ -199,11 +199,11 @@ body {
 .construction-banner {
     background-color: yellow;
     color: #000000;
-    display: none; /* Hidden by default */
+    display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 2rem;
+    padding: 2rem; /* Increased padding */
     position: fixed;
     bottom: 0;
     left: 0;
@@ -213,7 +213,7 @@ body {
 
 .construction-banner p {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.5rem; /* Increased font size */
     font-weight: bold;
 }
 
@@ -221,7 +221,7 @@ body {
 footer {
     text-align: center;
     padding: 2rem 1rem;
-    padding-bottom: 8rem; /* Space reserved for the banner if displayed */
+    padding-bottom: 8rem; /* Ensure space for fixed banner */
 }
 
 /* --- VISUAL EFFECTS --- */

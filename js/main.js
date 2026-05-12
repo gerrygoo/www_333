@@ -176,11 +176,11 @@ function initCursorWarp() {
         disp.setAttribute('yChannelSelector', 'G');
         newFilter.appendChild(disp);
         if (svgDefs) svgDefs.appendChild(newFilter);
-        if (heroEl) heroEl.style.filter = 'url(#cursor-warp-s)';
+        document.body.style.filter = 'url(#cursor-warp-s)';
         warpTurbulence = turb;
         state.warpDisplace = disp;
         state.warpScale = CONFIG.WARP_AMBIENT;
-        console.log('PDI safari: fresh filter cursor-warp-s injected. svgDefs=' + !!svgDefs + ' heroFilter=' + (heroEl && heroEl.style.filter));
+        console.log('PDI safari: fresh filter cursor-warp-s on body. svgDefs=' + !!svgDefs + ' bodyFilter=' + document.body.style.filter);
     }
 
     const warpDispImg = isSafari ? null : document.querySelector('#warp-disp-img');

@@ -228,20 +228,8 @@ body::after {
     filter: url(#rgb-split-intense);
 }
 
-/* Subtle baseline chromatic jitter */
-@keyframes logo-shake {
-    0%, 14%, 18%, 44%, 48%, 100% {
-        transform: translate(0, 0);
-    }
-    16% {
-        transform: translate(-1px, 0);
-    }
-    46% {
-        transform: translate(1px, 0.5px);
-    }
-}
-
-@keyframes text-shake {
+/* Subtle baseline chromatic jitter — decoupled via different shake-period + phase-offset */
+@keyframes shake {
     0%, 14%, 18%, 44%, 48%, 100% {
         transform: translate(0, 0);
     }
@@ -254,27 +242,15 @@ body::after {
 }
 
 .hero__logo {
-    animation: logo-shake 4.3s infinite;
+    animation: shake 4.3s infinite;
     animation-delay: -0.7s;
 }
 
 .hero__tagline,
 .instagram-link {
-    animation: text-shake 3.7s infinite;
+    animation: shake 3.7s infinite;
     animation-delay: -2.1s;
 }
-
-/* Aggressive jitter during glitch bursts */
-@keyframes chromatic-intense {
-    0%, 100% { 
-        transform: translate(2px, -1px);
-    }
-    50% { 
-        transform: translate(-2px, 1px);
-    }
-}
-
-/* Intensify jitter during glitch bursts */
 
 /* Power-On Flash Animation */
 @keyframes turn-on {

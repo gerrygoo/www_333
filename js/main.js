@@ -164,6 +164,7 @@ function initCursorWarp() {
             filter.appendChild(disp);
             warpTurbulence = turb;
             state.warpDisplace = disp;
+            console.log('PDI safari: rebuilt. children=' + filter.childElementCount + ' turb=' + turb.tagName + ' disp=' + disp.tagName + ' scale=' + disp.getAttribute('scale'));
         }
     }
 
@@ -263,7 +264,7 @@ function initCursorWarp() {
         };
     }
 
-    let prevX = 0, prevY = 0;
+    let prevX = 0, prevY = 0, _dbgFrames = 0;
 
     document.addEventListener('mousemove', e => {
         if (!state.hasMouseMoved) {
@@ -324,7 +325,9 @@ function initCursorWarp() {
                 warpTurbulence.setAttribute('baseFrequency', freqX.toFixed(5) + ' ' + freqY.toFixed(5));
             }
             if (state.warpDisplace) {
-                state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(1));
+                const sv = state.warpScale.toFixed(1);
+                if (_dbgFrames < 3) { console.log('PDI warp loop #' + _dbgFrames + ': scale=' + sv + ' pulse=' + state.warpPulse.toFixed(3) + ' disp=' + !!state.warpDisplace); _dbgFrames++; }
+                state.warpDisplace.setAttribute('scale', sv);
             }
         } else {
             if (state.warpDisplace) {

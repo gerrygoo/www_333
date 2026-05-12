@@ -139,8 +139,12 @@ function initCursorWarp() {
             || glCanvas.getContext('experimental-webgl', { premultipliedAlpha: false, alpha: true });
 
     let drawDispMap = function() {};
+    let glLost = false;
 
     if (gl) {
+        glCanvas.addEventListener('webglcontextlost', e => { e.preventDefault(); glLost = true; }, false);
+        glCanvas.addEventListener('webglcontextrestored', () => { glLost = false; }, false);
+
         const vs = gl.createShader(gl.VERTEX_SHADER);
         gl.shaderSource(vs, `attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`);
         gl.compileShader(vs);
@@ -189,7 +193,10 @@ function initCursorWarp() {
         const uPulse = gl.getUniformLocation(prog, 'u_pulse');
         const uLag   = gl.getUniformLocation(prog, 'u_lag');
 
+        let lastDiam = -1;
+
         drawDispMap = function(cx, cy, radius, phase, pulse, lagX, lagY) {
+            if (glLost) return;
             gl.uniform1f(uR, radius);
             gl.uniform1f(uPhase, phase);
             gl.uniform1f(uPulse, pulse);
@@ -201,14 +208,14 @@ function initCursorWarp() {
             if (warpDispImg) {
                 warpDispImg.setAttribute('x', Math.round(cx - half));
                 warpDispImg.setAttribute('y', Math.round(cy - half));
-                warpDispImg.setAttribute('width', diam);
-                warpDispImg.setAttribute('height', diam);
+                if (diam !== lastDiam) {
+                    warpDispImg.setAttribute('width', diam);
+                    warpDispImg.setAttribute('height', diam);
+                    lastDiam = diam;
+                }
                 const dataURL = glCanvas.toDataURL();
                 warpDispImg.setAttribute('href', dataURL);
                 warpDispImg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', dataURL);
-            }
-            if (state.warpDisplace) {
-                state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(1));
             }
         };
     }
@@ -265,14 +272,20 @@ function initCursorWarp() {
         ) * state.warpPulse;
 
         const radius = CONFIG.WARP_RADIUS_BASE + state.warpSpeed * CONFIG.WARP_RADIUS_VELOCITY_FACTOR;
-        const lagStrength = state.warpPulse * Math.min(state.warpSpeed * 3, radius * 0.3);
 
-        drawDispMap(
-            state.cursorX, state.cursorY, radius,
-            state.warpSeed, state.warpPulse,
-            -state.warpDirX * lagStrength,
-            -state.warpDirY * lagStrength
-        );
+        if (state.warpDisplace) {
+            state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(1));
+        }
+
+        if (state.warpPulse > 0.01) {
+            const lagStrength = state.warpPulse * Math.min(state.warpSpeed * 3, radius * 0.3);
+            drawDispMap(
+                state.cursorX, state.cursorY, radius,
+                state.warpSeed, state.warpPulse,
+                -state.warpDirX * lagStrength,
+                -state.warpDirY * lagStrength
+            );
+        }
 
         if (state.cursorGlow) {
             state.cursorGlow.style.setProperty('--cx', state.cursorX + 'px');

@@ -163,7 +163,8 @@ function initCursorWarp() {
                 const dist = Math.sqrt(distSq);
                 const t = dist / radius;
                 const mask = 0.5 * (1 + Math.cos(t * Math.PI));
-                const ripple = Math.sin(dist / wavelength - phase);
+                const warpedDist = radius * (t * t);
+                const ripple = Math.sin(warpedDist / wavelength - phase);
                 const dispMag = ripple * mask;
                 let rVal = 128, gVal = 128;
                 if (dist > 0.5) {

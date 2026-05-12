@@ -196,62 +196,63 @@ body::after {
 
 /* --- Glitch & Chromatic Aberration --- */
 
-/* Subtle baseline aberration - completely clean with rare, brief color flickers */
+.hero__logo {
+    /* If the logo is black, we invert it to make it white/glowing on the black BG */
+    filter: invert(1) url(#rgb-split);
+    transition: transform 0.1s ease;
+}
+
+.hero__tagline,
+.instagram-link {
+    filter: url(#rgb-split);
+}
+
+/* Intensify the channel split during bursts */
+.is-glitching .hero__logo,
+.is-glitching .hero__tagline,
+.is-glitching .instagram-link {
+    filter: invert(1) url(#rgb-split-intense);
+}
+
+.is-glitching .hero__tagline,
+.is-glitching .instagram-link {
+    filter: url(#rgb-split-intense);
+}
+
+/* Subtle baseline chromatic jitter */
 @keyframes chromatic-subtle {
     0%, 14%, 18%, 44%, 48%, 100% { 
-        text-shadow: 0 0 0 transparent, 0 0 0 transparent;
-        filter: drop-shadow(0 0 0 transparent) drop-shadow(0 0 0 transparent);
         transform: translate(0, 0);
     }
     16% { 
-        text-shadow: 2px 0 0 rgba(255,0,0,0.5), -1px 0 0 rgba(0,255,255,0.5);
-        filter: drop-shadow(1px 0 0 rgba(255,0,0,0.4)) drop-shadow(-1px 0 0 rgba(0,255,255,0.4));
         transform: translate(-1px, 0);
     }
     46% { 
-        text-shadow: -1.5px 0 0 rgba(255,0,0,0.5), 1px 0 0 rgba(0,255,255,0.5);
-        filter: drop-shadow(-1px 0 0 rgba(255,0,0,0.4)) drop-shadow(1px 0 0 rgba(0,255,255,0.4));
         transform: translate(1px, 0.5px);
-    }
-}
-
-/* Aggressive aberration during glitch bursts */
-@keyframes chromatic-intense {
-    0%, 100% { 
-        text-shadow: 3px 0 0 rgba(255,0,0,0.7), -3px 0 0 rgba(0,255,255,0.7);
-        filter: drop-shadow(3px 0 0 rgba(255,0,0,0.5)) drop-shadow(-3px 0 0 rgba(0,255,255,0.5));
-        transform: translate(2px, -1px);
-    }
-    50% { 
-        text-shadow: -4px 0 0 rgba(255,0,0,0.7), 4px 0 0 rgba(0,255,255,0.7);
-        filter: drop-shadow(-4px 0 0 rgba(255,0,0,0.5)) drop-shadow(4px 0 0 rgba(0,255,255,0.5));
-        transform: translate(-2px, 1px);
     }
 }
 
 .hero__logo,
 .hero__tagline,
 .instagram-link {
-    /* Slow, subtle drift by default */
     animation: chromatic-subtle 4s infinite;
 }
 
-/* Intensify everything during glitch bursts */
+/* Aggressive jitter during glitch bursts */
+@keyframes chromatic-intense {
+    0%, 100% { 
+        transform: translate(2px, -1px);
+    }
+    50% { 
+        transform: translate(-2px, 1px);
+    }
+}
+
+/* Intensify jitter during glitch bursts */
 .is-glitching .hero__logo,
 .is-glitching .hero__tagline,
 .is-glitching .instagram-link {
     animation: chromatic-intense 0.1s infinite;
-}
-
-/* Global container jitter during glitch bursts */
-.is-glitching .hero {
-    animation: chromatic-intense 0.08s infinite steps(1);
-}
-
-.hero__logo {
-    transition: filter 0.1s ease;
-    /* Ensure the image doesn't get clipped when it jitters */
-    will-change: transform, filter;
 }
 
 @keyframes glitch {

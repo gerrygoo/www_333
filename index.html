@@ -13,6 +13,42 @@
 </head>
 <body>
     <div class="visual-effects-overlay scanlines"></div>
+    
+    <!-- CRT RGB Split Filter -->
+    <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="rgb-split">
+          <feOffset in="SourceGraphic" dx="-2" dy="0" result="red"/>
+          <feOffset in="SourceGraphic" dx="2" dy="0" result="blue"/>
+          <feComponentTransfer in="red" result="red-only">
+            <feFuncG type="table" tableValues="0 0"/>
+            <feFuncB type="table" tableValues="0 0"/>
+          </feComponentTransfer>
+          <feComponentTransfer in="blue" result="blue-only">
+            <feFuncR type="table" tableValues="0 0"/>
+            <feFuncG type="table" tableValues="0 0"/>
+          </feComponentTransfer>
+          <feBlend in="red-only" in2="blue-only" mode="screen" result="split"/>
+          <feBlend in="split" in2="SourceGraphic" mode="screen"/>
+        </filter>
+        
+        <filter id="rgb-split-intense">
+          <feOffset in="SourceGraphic" dx="-5" dy="0" result="red"/>
+          <feOffset in="SourceGraphic" dx="5" dy="0" result="blue"/>
+          <feComponentTransfer in="red" result="red-only">
+            <feFuncG type="table" tableValues="0 0"/>
+            <feFuncB type="table" tableValues="0 0"/>
+          </feComponentTransfer>
+          <feComponentTransfer in="blue" result="blue-only">
+            <feFuncR type="table" tableValues="0 0"/>
+            <feFuncG type="table" tableValues="0 0"/>
+          </feComponentTransfer>
+          <feBlend in="red-only" in2="blue-only" mode="screen" result="split"/>
+          <feBlend in="split" in2="SourceGraphic" mode="screen"/>
+        </filter>
+      </defs>
+    </svg>
+
     <main class="hero">
         <img src="images/logos/pdi_logo_v2.6_black.png" alt="Paranormal Dynamics Inc. Logo" class="hero__logo">
         <div class="hero__tagline-group">

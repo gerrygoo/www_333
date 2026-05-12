@@ -148,39 +148,13 @@ function initCursorWarp() {
     let turbOffset = 0;
 
     if (isSafari) {
-        // Safari caches the entire filter definition at first use — modifying children of #cursor-warp
-        // is silently ignored. Create a fresh filter with a new ID and apply via inline style.
-        const svgDefs = document.querySelector('.svg-filters defs');
-        const heroEl = document.querySelector('.hero');
-        const ns = 'http://www.w3.org/2000/svg';
-        const newFilter = document.createElementNS(ns, 'filter');
-        newFilter.setAttribute('id', 'cursor-warp-s');
-        newFilter.setAttribute('x', '0');
-        newFilter.setAttribute('y', '0');
-        newFilter.setAttribute('width', '100%');
-        newFilter.setAttribute('height', '100%');
-        newFilter.setAttribute('filterUnits', 'userSpaceOnUse');
-        newFilter.setAttribute('color-interpolation-filters', 'sRGB');
-        const turb = document.createElementNS(ns, 'feTurbulence');
-        turb.setAttribute('type', 'fractalNoise');
-        turb.setAttribute('baseFrequency', '0.006 0.005');
-        turb.setAttribute('numOctaves', '3');
-        turb.setAttribute('seed', '42');
-        turb.setAttribute('result', 'noise');
-        newFilter.appendChild(turb);
-        const disp = document.createElementNS(ns, 'feDisplacementMap');
-        disp.setAttribute('in', 'SourceGraphic');
-        disp.setAttribute('in2', 'noise');
-        disp.setAttribute('scale', String(CONFIG.WARP_AMBIENT));
-        disp.setAttribute('xChannelSelector', 'R');
-        disp.setAttribute('yChannelSelector', 'G');
-        newFilter.appendChild(disp);
-        if (svgDefs) svgDefs.appendChild(newFilter);
-        document.body.style.filter = 'url(#cursor-warp-s)';
-        warpTurbulence = turb;
-        state.warpDisplace = disp;
+        // Use pre-defined #cursor-warp-s filter (HTML/CSS parsed at load time).
+        // Safari refuses to render dynamically-injected SVG filter references.
+        document.body.classList.add('is-safari');
+        warpTurbulence = document.querySelector('#warp-s-turb');
+        state.warpDisplace = document.querySelector('#warp-s-disp');
         state.warpScale = CONFIG.WARP_AMBIENT;
-        console.log('PDI safari: fresh filter cursor-warp-s on body. svgDefs=' + !!svgDefs + ' bodyFilter=' + document.body.style.filter);
+        console.log('PDI safari: is-safari class added. turb=' + !!warpTurbulence + ' disp=' + !!state.warpDisplace);
     }
 
     const warpDispImg = isSafari ? null : document.querySelector('#warp-disp-img');

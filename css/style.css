@@ -288,6 +288,10 @@ body.low-fi {
     will-change: filter;
 }
 
+body.is-safari .hero {
+    filter: url(#cursor-warp-s);
+}
+
 .cursor-glow {
     position: fixed;
     inset: 0;

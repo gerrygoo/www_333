@@ -21,6 +21,10 @@ Standard terms used across effect descriptions and tuning notes.
 | **burst-probability** | Chance a burst fires on each orchestrator tick (`GLITCH_PROBABILITY`) |
 | **swap-tick** | Base interval (ms) between logo asset swaps during a burst |
 | **swap-jitter** | Multiplier applied to swap-tick: `× (0.8 + rand × 0.4)` = ±20% variance |
+| **warp-ambient** | Baseline `feDisplacementMap` scale (px) when cursor is stationary |
+| **warp-max-scale** | Maximum displacement scale (px) — ceiling on warp intensity |
+| **warp-radius-base** | Cursor mask radius (px) at rest |
+| **warp-velocity-factor** | Displacement px added per px/frame of cursor speed |
 
 ---
 
@@ -39,6 +43,7 @@ Standard terms used across effect descriptions and tuning notes.
 | **Vignette / glass tube** | Baseline | `body::after` | Radial gradient + inset box-shadow |
 | **Scanlines** | Baseline | `.scanlines::before` | 4px repeating gradient, 0.2s scroll loop |
 | **Power-on flash** | Once (load) | `@keyframes turn-on` on `.hero` | 1.2s, collapses to horizontal line then expands with brightness flash |
+| **Cursor screen warp** | Baseline | `initCursorWarp()` → SVG filter `#cursor-warp` + `.cursor-glow` | warp-ambient 6px, warp-max 35px, radius-base 140px, velocity-factor 0.9 |
 
 ---
 

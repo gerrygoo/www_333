@@ -118,6 +118,20 @@ body {
 
 /* --- VISUAL EFFECTS --- */
 
+/* Screen Warp & Vignette (The "Glass Tube" Effect) */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.4) 150%);
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
+    z-index: 9999;
+}
+
 .scanlines {
     position: relative;
 }
@@ -158,6 +172,11 @@ body {
     animation: flicker 0.15s infinite;
 }
 
+/* Enhanced flicker during glitch bursts */
+.is-glitching .visual-effects-overlay {
+    animation: flicker 0.05s infinite;
+}
+
 @keyframes flicker {
     0% { opacity: 0.95; }
     5% { opacity: 0.85; }
@@ -175,7 +194,16 @@ body {
     100% { opacity: 0.95; }
 }
 
-/* --- Glitch Effect --- */
+/* --- Glitch & Chromatic Aberration --- */
+
+.hero__logo {
+    transition: filter 0.1s ease;
+}
+
+/* Chromatic Aberration on Logo during glitch */
+.is-glitching .hero__logo {
+    filter: drop-shadow(2px 0 0 rgba(255,0,0,0.5)) drop-shadow(-2px 0 0 rgba(0,255,255,0.5));
+}
 
 @keyframes glitch {
   0% {
@@ -208,8 +236,28 @@ body {
   }
 }
 
+/* Passive text glitch is subtle */
 .glitch {
   animation: glitch 725ms infinite;
+  opacity: 0.9;
+}
+
+/* Active text glitch during burst is aggressive */
+.is-glitching .glitch {
+    animation: glitch 100ms infinite;
+    opacity: 1;
+}
+
+/* Power-On Flash Animation */
+@keyframes turn-on {
+    0% { transform: scale(1, 0.8) translate3d(0, 0, 0); filter: brightness(30); opacity: 1; }
+    3% { transform: scale(1, 0.001) translate3d(0, 0, 0); filter: brightness(30); opacity: 1; }
+    6% { transform: scale(1.2, 0.001) translate3d(0, 0, 0); filter: brightness(30); opacity: 1; }
+    9% { transform: scale(1, 1) translate3d(0, 0, 0); filter: brightness(1); opacity: 1; }
+}
+
+.hero {
+    animation: turn-on 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 /* --- LOW-FI ADAPTIVE OVERRIDES --- */
@@ -222,6 +270,11 @@ body {
 .low-fi .glitch {
     animation: none !important;
     text-shadow: none !important;
+}
+
+.low-fi body::after,
+.low-fi .visual-effects-overlay {
+    display: none !important;
 }
 
 .low-fi body {

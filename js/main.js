@@ -129,7 +129,42 @@ function orchestrate() {
 function initCursorWarp() {
     state.warpDisplace = document.querySelector('#warp-displace');
     state.cursorGlow = document.querySelector('.cursor-glow');
-    const warpDispImg = document.querySelector('#warp-disp-img');
+
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    let warpTurbulence = null;
+    let turbOffset = 0;
+
+    if (isSafari) {
+        // Safari's feImage ignores dynamic href changes inside filters — rebuild to feTurbulence
+        const filter = document.querySelector('#cursor-warp');
+        if (filter) {
+            filter.setAttribute('x', '-5%');
+            filter.setAttribute('y', '-5%');
+            filter.setAttribute('width', '110%');
+            filter.setAttribute('height', '110%');
+            filter.removeAttribute('filterUnits');
+            while (filter.firstChild) filter.removeChild(filter.firstChild);
+            const ns = 'http://www.w3.org/2000/svg';
+            const turb = document.createElementNS(ns, 'feTurbulence');
+            turb.setAttribute('type', 'fractalNoise');
+            turb.setAttribute('baseFrequency', '0.006 0.005');
+            turb.setAttribute('numOctaves', '3');
+            turb.setAttribute('seed', '42');
+            turb.setAttribute('result', 'noise');
+            filter.appendChild(turb);
+            const disp = document.createElementNS(ns, 'feDisplacementMap');
+            disp.setAttribute('in', 'SourceGraphic');
+            disp.setAttribute('in2', 'noise');
+            disp.setAttribute('scale', '0');
+            disp.setAttribute('xChannelSelector', 'R');
+            disp.setAttribute('yChannelSelector', 'G');
+            filter.appendChild(disp);
+            warpTurbulence = turb;
+            state.warpDisplace = disp;
+        }
+    }
+
+    const warpDispImg = isSafari ? null : document.querySelector('#warp-disp-img');
 
     const MAP_SIZE = 256;
     const glCanvas = document.createElement('canvas');
@@ -278,18 +313,29 @@ function initCursorWarp() {
 
         const radius = CONFIG.WARP_RADIUS_BASE + state.warpSpeed * CONFIG.WARP_RADIUS_VELOCITY_FACTOR;
 
-        if (state.warpDisplace) {
-            state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(1));
-        }
-
-        if (state.warpPulse > 0.01) {
-            const lagStrength = state.warpPulse * Math.min(state.warpSpeed * 3, radius * 0.3);
-            drawDispMap(
-                state.cursorX, state.cursorY, radius,
-                state.warpSeed, state.warpPulse,
-                -state.warpDirX * lagStrength,
-                -state.warpDirY * lagStrength
-            );
+        if (isSafari) {
+            turbOffset += 0.0035 * (1 + state.warpPulse * 2);
+            if (warpTurbulence) {
+                const freqX = 0.006 + 0.003 * Math.sin(turbOffset);
+                const freqY = 0.005 + 0.002 * Math.cos(turbOffset * 0.73);
+                warpTurbulence.setAttribute('baseFrequency', freqX.toFixed(5) + ' ' + freqY.toFixed(5));
+            }
+            if (state.warpDisplace) {
+                state.warpDisplace.setAttribute('scale', (5 + state.warpScale * state.warpPulse).toFixed(1));
+            }
+        } else {
+            if (state.warpDisplace) {
+                state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(1));
+            }
+            if (state.warpPulse > 0.01) {
+                const lagStrength = state.warpPulse * Math.min(state.warpSpeed * 3, radius * 0.3);
+                drawDispMap(
+                    state.cursorX, state.cursorY, radius,
+                    state.warpSeed, state.warpPulse,
+                    -state.warpDirX * lagStrength,
+                    -state.warpDirY * lagStrength
+                );
+            }
         }
 
         if (state.cursorGlow) {

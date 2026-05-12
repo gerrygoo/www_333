@@ -6,6 +6,9 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Completed Tracks
 
+- [x] **Track: Pivot to Landing Page**
+*Link: [./conductor/tracks/pivot_to_landing_page_20260511/](./conductor/tracks/pivot_to_landing_page_20260511/)*
+
 - [x] **Track: Convert EPS to SVG**
 *Link: [./conductor/archive/convert_eps_to_svg_20260119/](./conductor/archive/convert_eps_to_svg_20260119/)*
 

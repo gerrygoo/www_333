@@ -7,9 +7,6 @@ This is a simple, clean, and modern landing page for a production company called
 The directory contains the following files and folders:
 
 -   `index.html`: The main landing page.
--   `demoreel.html`: A placeholder page for a demo reel.
--   `contact.html`: A placeholder page for contact information.
--   `shop.html`: A placeholder page for a shop.
 -   `css/`: A folder containing the stylesheets.
     -   `normalize.css`: A CSS reset library to ensure consistent styling across browsers.
     -   `style.css`: The main stylesheet for the website.
@@ -38,7 +35,7 @@ We are blending aesthetics from three distinct sources to create a "Cursed Datab
 
 ### 3. Habitant Productions (The "Professional/Industrial" Influence)
 -   **Key Elements:** Grid-based lists (Director / Client / Time), live clocks, industrial monospace typography, raw data presentation.
--   **Takeaway:** Use "Data Lists" for content (e.g., the Demo Reel). Present projects as "Files" or "Cases".
+-   **Takeaway:** Use "Data Lists" for content. Present projects as "Files" or "Cases".
 
 ### **Design Pillars for Paranormal Dynamics:**
 1.  **"Cursed Database" Aesthetic:** Structured data (lists, timecodes) corrupted by paranormal elements (glitches, weird symbols).
@@ -60,7 +57,7 @@ The following custom fonts are configured in `css/style.css` and ready for use:
 -   [ ] Configure GitHub Pages to ignore/exclude the `archival/` directory.
 ## Key Files
 
--   **`index.html`**: This is the main entry point for the website. It contains the main heading, tagline, and navigation.
+-   **`index.html`**: This is the main entry point for the website. It contains the main heading, tagline, and interactive elements.
 -   **`css/style.css`**: This file contains all of the custom styles for the website. It includes the "old film effect" and the responsive design.
 
 ## Building and Running

@@ -4,12 +4,10 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Convert EPS to SVG**
-*Link: [./conductor/tracks/convert_eps_to_svg_20260119/](./conductor/tracks/convert_eps_to_svg_20260119/)*
-
----
-
 ## Completed Tracks
+
+- [x] **Track: Convert EPS to SVG**
+*Link: [./conductor/archive/convert_eps_to_svg_20260119/](./conductor/archive/convert_eps_to_svg_20260119/)*
 
 - [x] **Track: Integrate Brand Identity and Visual Assets**
 *Link: [./conductor/archive/integrate_brand_assets_20251230/](./conductor/archive/integrate_brand_assets_20251230/)*

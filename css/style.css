@@ -34,30 +34,39 @@
     font-style: normal;
 }
 
-/* General Body Styles */
-body {
-    font-family: "Courier New", Courier, monospace;
+/* Reset & Base Styles */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
     background-color: #000000;
-    color: #ffffff;
-    line-height: 1.6;
-    position: relative;
 }
 
-/* Hero Section Styles (Mobile First) */
+body {
+    font-family: "Courier New", Courier, monospace;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+/* Hero Section */
 .hero {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
     min-height: 100vh;
-    padding: 2rem 1rem;
+    padding: 2rem;
+    box-sizing: border-box;
     text-align: center;
 }
 
 .hero__logo {
     max-width: 80%;
     height: auto;
-    margin: 0 0 1rem 0;
+    margin: 0 0 1.5rem 0;
 }
 
 .hero__tagline-group {
@@ -65,25 +74,26 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     align-items: baseline;
-    gap: 0.5rem;
-    max-width: 90%;
+    gap: 0.75rem;
+    max-width: 800px;
     margin: 0 auto;
 }
 
 .hero__tagline {
     font-family: 'Terminal Grotesque', "Courier New", Courier, monospace;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #ffffff;
     margin: 0;
 }
 
 .instagram-link {
     font-family: "Courier New", Courier, monospace;
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #ffffff;
     text-decoration: none;
     border-bottom: 1px solid #ffffff;
     white-space: nowrap;
+    transition: all 0.2s ease;
 }
 
 .instagram-link:hover {
@@ -91,10 +101,18 @@ body {
     color: #000000;
 }
 
-/* Desktop Styles */
+/* Desktop Overrides */
 @media (min-width: 768px) {
     .hero__logo {
         max-width: 600px;
+    }
+    
+    .hero__tagline {
+        font-size: 1.5rem;
+    }
+    
+    .instagram-link {
+        font-size: 1.2rem;
     }
 }
 
@@ -115,8 +133,8 @@ body {
     background: linear-gradient(to bottom, 
         rgba(255,255,255,0) 0%, 
         rgba(255,255,255,0) 50%, 
-        rgba(0,0,0,0.1) 50.1%, 
-        rgba(0,0,0,0.1) 100%);
+        rgba(0,0,0,0.15) 50.1%, 
+        rgba(0,0,0,0.15) 100%);
     background-size: 100% 4px;
     z-index: 12;
     pointer-events: none;
@@ -137,7 +155,6 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: 9000;
-    /* CRT flicker effect */
     animation: flicker 0.15s infinite;
 }
 
@@ -209,93 +226,4 @@ body {
 
 .low-fi body {
     background-image: none !important; 
-}
-
-/* --- PORTFOLIO STYLES --- */
-
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid #ffffff;
-}
-
-.header__logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
-    color: #ffffff;
-}
-
-.content-area {
-    padding: 2rem;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.section-title {
-    font-family: "Courier New", Courier, monospace;
-    font-size: 1.2rem;
-    border-bottom: 2px solid #ffffff;
-    padding-bottom: 0.5rem;
-    margin-bottom: 2rem;
-}
-
-.project-list {
-    list-style: none;
-    padding: 0;
-}
-
-.project-record {
-    border: 1px solid #ffffff;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    background-color: rgba(255, 255, 255, 0.05);
-    transition: transform 0.1s ease;
-}
-
-.project-record dl {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 0.5rem;
-    margin: 0;
-}
-
-.project-record dt {
-    font-weight: bold;
-    color: #888888;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-}
-
-.project-record dd {
-    margin: 0;
-    font-family: "Courier New", Courier, monospace;
-}
-
-.project-record:hover {
-    background-color: #ffffff;
-    color: #000000;
-    transform: translate(4px, -4px);
-    box-shadow: -4px 4px 0px #ff00ff;
-    cursor: crosshair;
-}
-
-.project-record:hover dt {
-    color: #333333;
-}
- New", Courier, monospace;
-}
-
-.project-record:hover {
-    background-color: #ffffff;
-    color: #000000;
-    transform: translate(4px, -4px);
-    box-shadow: -4px 4px 0px #ff00ff;
-    cursor: crosshair;
-}
-
-.project-record:hover dt {
-    color: #333333;
 }

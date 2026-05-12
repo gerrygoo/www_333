@@ -52,7 +52,8 @@
           <feImage id="warp-disp-img" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="dispmap"/>
           <feDisplacementMap id="warp-displace" in="SourceGraphic" in2="dispmap" scale="1" xChannelSelector="R" yChannelSelector="G" result="warped"/>
           <feComposite in="warped" in2="dispmap" operator="in" result="localized"/>
-          <feComposite in="localized" in2="SourceGraphic" operator="over"/>
+          <feComposite in="SourceGraphic" in2="dispmap" operator="out" result="bg"/>
+          <feComposite in="localized" in2="bg" operator="over"/>
         </filter>
       </defs>
     </svg>

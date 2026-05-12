@@ -1,3 +1,5 @@
+const VERSION = '1.0.0';
+
 const CONFIG = {
     GLITCH_WAIT_MIN: 400,
     GLITCH_WAIT_MAX: 3500,
@@ -350,6 +352,7 @@ function initCursorWarp() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('PDI v' + VERSION);
     state.logoElement = document.querySelector('.hero__logo');
 
     const rgbSplit = document.querySelector('#rgb-split');

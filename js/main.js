@@ -8,6 +8,11 @@ const CONFIG = {
     WARP_AMBIENT: 40,
     WARP_VELOCITY_FACTOR: 0.54,
     WARP_MAX_SCALE: 150,
+    WARP_RADIUS_BASE: 900,
+    WARP_RADIUS_VELOCITY_FACTOR: 0.24,
+    WARP_SEED_SPEED: 0.08,
+    WARP_SEED_VELOCITY_FACTOR: 0.11,
+    WARP_MAX_SEED_INCREMENT: 0.10,
     WARP_RGB_BOOST_THRESHOLD: 3,
     WARP_RGB_BOOST_FACTOR: 0.05,
     ASSETS: [
@@ -39,12 +44,13 @@ const state = {
     filterBlueIntense: null,
     cursorX: 0,
     cursorY: 0,
+    warpSeed: 0,
     warpScale: 0,
     warpSpeed: 0,
     warpPulse: 0,
-    warpTurbOffset: 0,
+    warpDirX: 0,
+    warpDirY: 0,
     hasMouseMoved: false,
-    warpTurbulence: null,
     warpDisplace: null,
     cursorGlow: null,
 };
@@ -121,12 +127,93 @@ function orchestrate() {
 }
 
 function initCursorWarp() {
-    state.warpTurbulence = document.querySelector('#warp-turbulence');
     state.warpDisplace = document.querySelector('#warp-displace');
     state.cursorGlow = document.querySelector('.cursor-glow');
+    const warpDispImg = document.querySelector('#warp-disp-img');
 
-    let prevX = 0;
-    let prevY = 0;
+    const MAP_SIZE = 256;
+    const glCanvas = document.createElement('canvas');
+    glCanvas.width = MAP_SIZE;
+    glCanvas.height = MAP_SIZE;
+    const gl = glCanvas.getContext('webgl', { premultipliedAlpha: false, alpha: true })
+            || glCanvas.getContext('experimental-webgl', { premultipliedAlpha: false, alpha: true });
+
+    let drawDispMap = function() {};
+
+    if (gl) {
+        const vs = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vs, `attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`);
+        gl.compileShader(vs);
+
+        const fs = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fs, `
+            precision mediump float;
+            uniform float u_r,u_phase,u_pulse;
+            uniform vec2 u_lag;
+            void main(){
+                float diam=u_r*2.+4.;
+                vec2 d=vec2(gl_FragCoord.x/${MAP_SIZE}.-0.5, 0.5-gl_FragCoord.y/${MAP_SIZE}.)*diam;
+                float dist=length(d);
+                if(dist>u_r){gl_FragColor=vec4(.502,.502,0.,0.);return;}
+                float t=dist/u_r;
+                float mask=.5*(1.+cos(t*3.14159265));
+                vec2 ld=d-u_lag;
+                float pd=length(ld);
+                float wd=pd*pd/u_r;
+                float ripple=sin(wd/(u_r*.35)-u_phase);
+                float mag=ripple*mask*u_pulse;
+                vec2 dir=dist>.5?d/dist:vec2(0.);
+                gl_FragColor=vec4(
+                    clamp(.502+dir.x*mag*.498,0.,1.),
+                    clamp(.502+dir.y*mag*.498,0.,1.),
+                    0.,mask);
+            }
+        `);
+        gl.compileShader(fs);
+
+        const prog = gl.createProgram();
+        gl.attachShader(prog, vs);
+        gl.attachShader(prog, fs);
+        gl.linkProgram(prog);
+        gl.useProgram(prog);
+
+        const buf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+        const pLoc = gl.getAttribLocation(prog, 'p');
+        gl.enableVertexAttribArray(pLoc);
+        gl.vertexAttribPointer(pLoc, 2, gl.FLOAT, false, 0, 0);
+
+        const uR     = gl.getUniformLocation(prog, 'u_r');
+        const uPhase = gl.getUniformLocation(prog, 'u_phase');
+        const uPulse = gl.getUniformLocation(prog, 'u_pulse');
+        const uLag   = gl.getUniformLocation(prog, 'u_lag');
+
+        drawDispMap = function(cx, cy, radius, phase, pulse, lagX, lagY) {
+            gl.uniform1f(uR, radius);
+            gl.uniform1f(uPhase, phase);
+            gl.uniform1f(uPulse, pulse);
+            gl.uniform2f(uLag, lagX, lagY);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+            const diam = Math.ceil(radius * 2) + 4;
+            const half = diam / 2;
+            if (warpDispImg) {
+                warpDispImg.setAttribute('x', Math.round(cx - half));
+                warpDispImg.setAttribute('y', Math.round(cy - half));
+                warpDispImg.setAttribute('width', diam);
+                warpDispImg.setAttribute('height', diam);
+                const dataURL = glCanvas.toDataURL();
+                warpDispImg.setAttribute('href', dataURL);
+                warpDispImg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', dataURL);
+            }
+            if (state.warpDisplace) {
+                state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(1));
+            }
+        };
+    }
+
+    let prevX = 0, prevY = 0;
 
     document.addEventListener('mousemove', e => {
         if (!state.hasMouseMoved) {
@@ -157,6 +244,11 @@ function initCursorWarp() {
         const rawSpeed = Math.sqrt(dx * dx + dy * dy);
         state.warpSpeed = state.warpSpeed + (rawSpeed - state.warpSpeed) * 0.08;
 
+        if (rawSpeed > 0.1) {
+            state.warpDirX += (dx / rawSpeed - state.warpDirX) * 0.15;
+            state.warpDirY += (dy / rawSpeed - state.warpDirY) * 0.15;
+        }
+
         const targetScale = Math.min(
             CONFIG.WARP_AMBIENT + state.warpSpeed * CONFIG.WARP_VELOCITY_FACTOR,
             CONFIG.WARP_MAX_SCALE
@@ -167,17 +259,20 @@ function initCursorWarp() {
         const pulseRate = pulseTarget > state.warpPulse ? 0.08 : 0.019;
         state.warpPulse += (pulseTarget - state.warpPulse) * pulseRate;
 
-        // Slowly drift baseFrequency for organic liquid motion; faster when active
-        state.warpTurbOffset += 0.0035 * (1 + state.warpPulse * 2);
-        const freqX = 0.006 + 0.003 * Math.sin(state.warpTurbOffset);
-        const freqY = 0.005 + 0.002 * Math.cos(state.warpTurbOffset * 0.73);
-        if (state.warpTurbulence) {
-            state.warpTurbulence.setAttribute('baseFrequency', freqX.toFixed(5) + ' ' + freqY.toFixed(5));
-        }
-        if (state.warpDisplace) {
-            const effectiveScale = 5 + state.warpScale * state.warpPulse;
-            state.warpDisplace.setAttribute('scale', effectiveScale.toFixed(1));
-        }
+        state.warpSeed += Math.min(
+            CONFIG.WARP_SEED_SPEED + state.warpSpeed * CONFIG.WARP_SEED_VELOCITY_FACTOR,
+            CONFIG.WARP_MAX_SEED_INCREMENT
+        ) * state.warpPulse;
+
+        const radius = CONFIG.WARP_RADIUS_BASE + state.warpSpeed * CONFIG.WARP_RADIUS_VELOCITY_FACTOR;
+        const lagStrength = state.warpPulse * Math.min(state.warpSpeed * 3, radius * 0.3);
+
+        drawDispMap(
+            state.cursorX, state.cursorY, radius,
+            state.warpSeed, state.warpPulse,
+            -state.warpDirX * lagStrength,
+            -state.warpDirY * lagStrength
+        );
 
         if (state.cursorGlow) {
             state.cursorGlow.style.setProperty('--cx', state.cursorX + 'px');

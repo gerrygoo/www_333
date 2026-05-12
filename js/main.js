@@ -194,7 +194,9 @@ function initCursorWarp() {
             warpDispImg.setAttribute('y', imgY);
             warpDispImg.setAttribute('width', diam);
             warpDispImg.setAttribute('height', diam);
-            warpDispImg.setAttribute('href', dispCanvas.toDataURL());
+            const dataURL = dispCanvas.toDataURL();
+            warpDispImg.setAttribute('href', dataURL);
+            warpDispImg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', dataURL);
         }
         if (state.warpDisplace) {
             state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(1));

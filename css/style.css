@@ -196,47 +196,57 @@ body::after {
 
 /* --- Glitch & Chromatic Aberration --- */
 
-@keyframes chromatic-aberration {
-    0%, 100% { 
-        text-shadow: 2px 0 0 rgba(255,0,0,0.6), -2px 0 0 rgba(0,255,255,0.6);
-        filter: drop-shadow(2px 0 0 rgba(255,0,0,0.4)) drop-shadow(-2px 0 0 rgba(0,255,255,0.4));
+/* Subtle baseline aberration - mostly static with rare micro-jitters */
+@keyframes chromatic-subtle {
+    0%, 15%, 17%, 100% { 
+        text-shadow: 0.5px 0 0 rgba(255,0,0,0.4), -0.5px 0 0 rgba(0,255,255,0.4);
+        filter: drop-shadow(0.5px 0 0 rgba(255,0,0,0.3)) drop-shadow(-0.5px 0 0 rgba(0,255,255,0.3));
         transform: translate(0, 0);
     }
-    25% { 
-        text-shadow: -1.5px 0 0 rgba(255,0,0,0.6), 1.5px 0 0 rgba(0,255,255,0.6);
-        filter: drop-shadow(-1.5px 0 0 rgba(255,0,0,0.4)) drop-shadow(1.5px 0 0 rgba(0,255,255,0.4));
-        transform: translate(-1px, 1px);
+    16% { 
+        text-shadow: 1.5px 0 0 rgba(255,0,0,0.5), -1px 0 0 rgba(0,255,255,0.5);
+        filter: drop-shadow(1px 0 0 rgba(255,0,0,0.4)) drop-shadow(-1px 0 0 rgba(0,255,255,0.4));
+        transform: translate(-1px, 0);
+    }
+}
+
+/* Aggressive aberration during glitch bursts */
+@keyframes chromatic-intense {
+    0%, 100% { 
+        text-shadow: 3px 0 0 rgba(255,0,0,0.7), -3px 0 0 rgba(0,255,255,0.7);
+        filter: drop-shadow(3px 0 0 rgba(255,0,0,0.5)) drop-shadow(-3px 0 0 rgba(0,255,255,0.5));
+        transform: translate(2px, -1px);
     }
     50% { 
-        text-shadow: 3.5px 0 0 rgba(255,0,0,0.6), -1px 0 0 rgba(0,255,255,0.6);
-        filter: drop-shadow(3.5px 0 0 rgba(255,0,0,0.4)) drop-shadow(-1px 0 0 rgba(0,255,255,0.4));
-        transform: translate(1px, -1px);
-    }
-    75% { 
-        text-shadow: -2.5px 0 0 rgba(255,0,0,0.6), 2.5px 0 0 rgba(0,255,255,0.6);
-        filter: drop-shadow(-2.5px 0 0 rgba(255,0,0,0.4)) drop-shadow(2.5px 0 0 rgba(0,255,255,0.4));
-        transform: translate(-1px, -1px);
+        text-shadow: -4px 0 0 rgba(255,0,0,0.7), 4px 0 0 rgba(0,255,255,0.7);
+        filter: drop-shadow(-4px 0 0 rgba(255,0,0,0.5)) drop-shadow(4px 0 0 rgba(0,255,255,0.5));
+        transform: translate(-2px, 1px);
     }
 }
 
 .hero__logo,
 .hero__tagline,
 .instagram-link {
-    animation: chromatic-aberration 0.15s infinite steps(2);
+    /* Slow, subtle drift by default */
+    animation: chromatic-subtle 4s infinite;
+}
+
+/* Intensify everything during glitch bursts */
+.is-glitching .hero__logo,
+.is-glitching .hero__tagline,
+.is-glitching .instagram-link {
+    animation: chromatic-intense 0.1s infinite;
 }
 
 /* Global container jitter during glitch bursts */
 .is-glitching .hero {
-    animation: chromatic-aberration 0.05s infinite steps(1);
+    animation: chromatic-intense 0.08s infinite steps(1);
 }
 
 .hero__logo {
     transition: filter 0.1s ease;
-}
-
-/* Chromatic Aberration intensifies on Logo during glitch burst */
-.is-glitching .hero__logo {
-    filter: drop-shadow(6px 0 0 rgba(255,0,0,0.8)) drop-shadow(-6px 0 0 rgba(0,255,255,0.8));
+    /* Ensure the image doesn't get clipped when it jitters */
+    will-change: transform, filter;
 }
 
 @keyframes glitch {

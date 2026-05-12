@@ -4,6 +4,11 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+- [ ] **Track: Asset Integration & CRT Polish**
+*Link: [./conductor/tracks/asset_crt_integration_20260512/](./conductor/tracks/asset_crt_integration_20260512/)*
+
+---
+
 ## Completed Tracks
 
 - [x] **Track: Pivot to Landing Page**

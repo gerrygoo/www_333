@@ -42,18 +42,22 @@ body {
     line-height: 1.6;
     position: relative;
 }
-}
 
 /* Hero Section Styles (Mobile First) */
 .hero {
-    padding: 4rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 1rem;
     text-align: center;
 }
 
 .hero__logo {
-    font-size: 2.5rem;
+    max-width: 80%;
+    height: auto;
     margin: 0 0 1rem 0;
-    font-weight: 700;
 }
 
 .hero__tagline {

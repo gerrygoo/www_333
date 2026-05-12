@@ -5,12 +5,12 @@ const CONFIG = {
     GLITCH_DURATION: 800,
     SWAP_INTERVAL: 100,
     ORIGINAL_LOGO: 'images/logos/pdi_logo_v2.6_black.png',
-    WARP_AMBIENT: 20,
+    WARP_AMBIENT: 40,
     WARP_VELOCITY_FACTOR: 0.9,
-    WARP_MAX_SCALE: 65,
+    WARP_MAX_SCALE: 150,
     WARP_RADIUS_BASE: 140,
     WARP_RADIUS_VELOCITY_FACTOR: 0.4,
-    WARP_SEED_SPEED: 0.03,
+    WARP_SEED_SPEED: 0.08,
     WARP_SEED_VELOCITY_FACTOR: 0.18,
     WARP_RGB_BOOST_THRESHOLD: 3,
     WARP_RGB_BOOST_FACTOR: 0.08,
@@ -47,7 +47,6 @@ const state = {
     warpScale: 0,
     warpSpeed: 0,
     hasMouseMoved: false,
-    warpTurbulence: null,
     warpDisplace: null,
     cursorGlow: null,
 };
@@ -124,43 +123,72 @@ function orchestrate() {
 }
 
 function initCursorWarp() {
-    state.warpTurbulence = document.querySelector('#warp-turbulence');
     state.warpDisplace = document.querySelector('#warp-displace');
     state.cursorGlow = document.querySelector('.cursor-glow');
 
-    const maskCanvas = document.createElement('canvas');
-    const maskCtx = maskCanvas.getContext('2d');
-    const warpMaskImg = document.querySelector('#warp-mask-img');
+    const dispCanvas = document.createElement('canvas');
+    const dispCtx = dispCanvas.getContext('2d');
+    const warpDispImg = document.querySelector('#warp-disp-img');
+    let imageData = null;
 
-    function updateMaskCanvas(cx, cy, r) {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        if (maskCanvas.width !== w || maskCanvas.height !== h) {
-            maskCanvas.width = w;
-            maskCanvas.height = h;
+    function drawDispMap(cx, cy, radius, phase) {
+        const diam = Math.ceil(radius * 2) + 4;
+        if (dispCanvas.width !== diam || dispCanvas.height !== diam) {
+            dispCanvas.width = diam;
+            dispCanvas.height = diam;
+            imageData = null;
         }
-        maskCtx.clearRect(0, 0, w, h);
-        const grad = maskCtx.createRadialGradient(cx, cy, 0, cx, cy, r);
-        grad.addColorStop(0, 'rgba(255,255,255,1)');
-        grad.addColorStop(0.7, 'rgba(255,255,255,0.15)');
-        grad.addColorStop(1, 'rgba(255,255,255,0)');
-        maskCtx.fillStyle = grad;
-        maskCtx.fillRect(0, 0, w, h);
-        if (warpMaskImg) warpMaskImg.setAttribute('href', maskCanvas.toDataURL());
-    }
+        if (!imageData) imageData = dispCtx.createImageData(diam, diam);
+        imageData.data.fill(0);
 
-    // Set filter and feImage to explicit px dimensions so filterUnits="userSpaceOnUse"
-    // resolves correctly (percentage attrs on feImage resolve against the hidden SVG's
-    // 0×0 viewport otherwise, clipping the mask to nothing).
-    const warpFilter = document.querySelector('#cursor-warp');
-    function setWarpDimensions() {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        if (warpFilter) { warpFilter.setAttribute('width', w); warpFilter.setAttribute('height', h); }
-        if (warpMaskImg) { warpMaskImg.setAttribute('width', w); warpMaskImg.setAttribute('height', h); }
+        const half = diam / 2;
+        const wavelength = radius * 0.45;
+        const radSq = radius * radius;
+
+        for (let y = 0; y < diam; y++) {
+            for (let x = 0; x < diam; x++) {
+                const dx = x - half;
+                const dy = y - half;
+                const distSq = dx * dx + dy * dy;
+                const idx = (y * diam + x) * 4;
+                if (distSq > radSq) {
+                    imageData.data[idx] = 128;
+                    imageData.data[idx + 1] = 128;
+                    continue;
+                }
+                const dist = Math.sqrt(distSq);
+                const t = dist / radius;
+                const mask = 0.5 * (1 + Math.cos(t * Math.PI));
+                const ripple = Math.sin(dist / wavelength - phase);
+                const dispMag = ripple * mask;
+                let rVal = 128, gVal = 128;
+                if (dist > 0.5) {
+                    rVal = 128 + Math.round((dx / dist) * dispMag * 127);
+                    gVal = 128 + Math.round((dy / dist) * dispMag * 127);
+                    rVal = Math.max(0, Math.min(255, rVal));
+                    gVal = Math.max(0, Math.min(255, gVal));
+                }
+                imageData.data[idx]     = rVal;
+                imageData.data[idx + 1] = gVal;
+                imageData.data[idx + 2] = 0;
+                imageData.data[idx + 3] = Math.round(mask * 255);
+            }
+        }
+        dispCtx.putImageData(imageData, 0, 0);
+
+        const imgX = Math.round(cx - half);
+        const imgY = Math.round(cy - half);
+        if (warpDispImg) {
+            warpDispImg.setAttribute('x', imgX);
+            warpDispImg.setAttribute('y', imgY);
+            warpDispImg.setAttribute('width', diam);
+            warpDispImg.setAttribute('height', diam);
+            warpDispImg.setAttribute('href', dispCanvas.toDataURL());
+        }
+        if (state.warpDisplace) {
+            state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(1));
+        }
     }
-    setWarpDimensions();
-    window.addEventListener('resize', setWarpDimensions);
 
     let prevX = 0;
     let prevY = 0;
@@ -201,12 +229,11 @@ function initCursorWarp() {
         state.warpScale = state.warpScale + (targetScale - state.warpScale) * 0.05;
 
         state.warpSeed += CONFIG.WARP_SEED_SPEED + state.warpSpeed * CONFIG.WARP_SEED_VELOCITY_FACTOR;
-        const seed = Math.floor(state.warpSeed) % 999;
+
         const radius = CONFIG.WARP_RADIUS_BASE + state.warpSpeed * CONFIG.WARP_RADIUS_VELOCITY_FACTOR;
 
-        if (state.warpTurbulence) state.warpTurbulence.setAttribute('seed', seed);
-        if (state.warpDisplace) state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(2));
-        updateMaskCanvas(state.cursorX, state.cursorY, radius);
+        drawDispMap(state.cursorX, state.cursorY, radius, state.warpSeed);
+
         if (state.cursorGlow) {
             state.cursorGlow.style.setProperty('--cx', state.cursorX + 'px');
             state.cursorGlow.style.setProperty('--cy', state.cursorY + 'px');

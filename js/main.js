@@ -367,6 +367,54 @@ function initCursorWarp() {
     requestAnimationFrame(warpLoop);
 }
 
+function initCrtNoise() {
+    const canvas = document.getElementById('crt-noise');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function drawNoise() {
+        const density = state.isNoising ? CONFIG.NOISE_DENSITY_BURST : CONFIG.NOISE_DENSITY_AMBIENT;
+        const count = Math.floor(canvas.width * canvas.height * density);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#ffffff';
+        for (let i = 0; i < count; i++) {
+            ctx.globalAlpha = 0.3 + Math.random() * 0.7;
+            ctx.fillRect(
+                Math.floor(Math.random() * canvas.width),
+                Math.floor(Math.random() * canvas.height),
+                1, 1
+            );
+        }
+    }
+
+    state.noiseInterval = setInterval(drawNoise, 1000 / CONFIG.NOISE_FPS_AMBIENT);
+
+    function noiseBurstLoop() {
+        if (!state.isNoising && Math.random() < CONFIG.NOISE_BURST_PROBABILITY) {
+            state.isNoising = true;
+            clearInterval(state.noiseInterval);
+            state.noiseInterval = setInterval(drawNoise, 1000 / CONFIG.NOISE_FPS_BURST);
+            setTimeout(() => {
+                state.isNoising = false;
+                clearInterval(state.noiseInterval);
+                state.noiseInterval = setInterval(drawNoise, 1000 / CONFIG.NOISE_FPS_AMBIENT);
+            }, CONFIG.NOISE_BURST_DURATION);
+        }
+        const wait = CONFIG.NOISE_BURST_WAIT_MIN +
+            Math.random() * (CONFIG.NOISE_BURST_WAIT_MAX - CONFIG.NOISE_BURST_WAIT_MIN);
+        setTimeout(noiseBurstLoop, wait);
+    }
+
+    noiseBurstLoop();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('PDI v' + VERSION);
     state.logoElement = document.querySelector('.hero__logo');
@@ -389,5 +437,6 @@ document.addEventListener('DOMContentLoaded', () => {
         orchestrate();
         animateFilters();
         initCursorWarp();
+        initCrtNoise();
     }
 });

@@ -46,7 +46,7 @@ Standard terms used across effect descriptions and tuning notes.
 | **Scanlines** | Baseline | `.scanlines::before` | 4px repeating gradient, 0.2s scroll loop |
 | **Power-on flash** | Once (load) | `@keyframes turn-on` on `.hero` | 1.2s, collapses to horizontal line then expands with brightness flash |
 | **Cursor screen warp** | Baseline | `initCursorWarp()` → SVG filter `#cursor-warp` + `.cursor-glow` | warp-ambient 6px, warp-max 35px, radius-base 140px, velocity-factor 0.9 |
-| **CRT noise** | Baseline + own burst | `initCrtNoise()` → `<canvas id="crt-noise">` | noise-density 0.07 ambient / 0.22 burst, fps 15 ambient / 30 burst, burst-duration 600ms, noise-burst-wait 2000–8000ms, burst-probability 0.6 |
+| **CRT noise** | Baseline + own burst | `initCrtNoise()` → `<canvas id="crt-noise">` | noise-density 0.05 ambient / 0.22 burst, fps 15 ambient / 30 burst, burst-duration 3000ms, noise-burst-wait 2000–18000ms, burst-probability 0.6 |
 
 ---
 

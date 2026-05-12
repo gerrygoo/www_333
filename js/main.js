@@ -371,6 +371,7 @@ function initCrtNoise() {
     const canvas = document.getElementById('crt-noise');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
 
     function resizeCanvas() {
         canvas.width = window.innerWidth;
@@ -383,7 +384,6 @@ function initCrtNoise() {
         const density = state.isNoising ? CONFIG.NOISE_DENSITY_BURST : CONFIG.NOISE_DENSITY_AMBIENT;
         const count = Math.floor(canvas.width * canvas.height * density);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#ffffff';
         for (let i = 0; i < count; i++) {
             ctx.globalAlpha = 0.3 + Math.random() * 0.7;
             ctx.fillRect(
@@ -392,6 +392,7 @@ function initCrtNoise() {
                 1, 1
             );
         }
+        ctx.globalAlpha = 1;
     }
 
     state.noiseInterval = setInterval(drawNoise, 1000 / CONFIG.NOISE_FPS_AMBIENT);

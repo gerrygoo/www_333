@@ -193,7 +193,7 @@ function initCursorWarp() {
                 float pd=length(ld);
                 float wd=pd*pd/u_r;
                 float ripple=sin(wd/(u_r*.35)-u_phase);
-                float mag=ripple*mask*u_pulse;
+                float mag=mask*(1.+ripple*u_pulse);
                 vec2 dir=dist>.5?d/dist:vec2(0.);
                 gl_FragColor=vec4(
                     clamp(.502+dir.x*mag*.498,0.,1.),
@@ -254,12 +254,14 @@ function initCursorWarp() {
     }
 
     let prevX = 0, prevY = 0, _dbgFrames = 0;
+    let idleDrawn = false;
 
     document.addEventListener('mousemove', e => {
         if (!state.hasMouseMoved) {
             state.hasMouseMoved = true;
             document.body.classList.add('has-cursor');
         }
+        idleDrawn = false;
         state.cursorX = e.clientX;
         state.cursorY = e.clientY;
     });
@@ -322,14 +324,18 @@ function initCursorWarp() {
             if (state.warpDisplace) {
                 state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(1));
             }
-            if (state.warpPulse > 0.01) {
-                const lagStrength = state.warpPulse * Math.min(state.warpSpeed * 3, radius * 0.3);
-                drawDispMap(
-                    state.cursorX, state.cursorY, radius,
-                    state.warpSeed, state.warpPulse,
-                    -state.warpDirX * lagStrength,
-                    -state.warpDirY * lagStrength
-                );
+            if (state.hasMouseMoved) {
+                const isActive = state.warpPulse > 0.01;
+                if (isActive || !idleDrawn) {
+                    const lagStrength = state.warpPulse * Math.min(state.warpSpeed * 3, radius * 0.3);
+                    drawDispMap(
+                        state.cursorX, state.cursorY, radius,
+                        state.warpSeed, state.warpPulse,
+                        -state.warpDirX * lagStrength,
+                        -state.warpDirY * lagStrength
+                    );
+                    if (!isActive) idleDrawn = true;
+                }
             }
         }
 

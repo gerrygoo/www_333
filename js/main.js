@@ -1,4 +1,4 @@
-const VERSION = '1.1.1';
+const VERSION = '1.1.1-85607fd';
 
 const CONFIG = {
     GLITCH_WAIT_MIN: 400,
@@ -7,7 +7,7 @@ const CONFIG = {
     GLITCH_DURATION: 800,
     SWAP_INTERVAL: 100,
     ORIGINAL_LOGO: 'images/logos/pdi_logo_v2.6_black.png',
-    WARP_AMBIENT: 40,
+    WARP_AMBIENT: 52,
     WARP_VELOCITY_FACTOR: 0.54,
     WARP_MAX_SCALE: 150,
     WARP_RADIUS_BASE: 900,

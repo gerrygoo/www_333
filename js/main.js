@@ -8,7 +8,7 @@ const CONFIG = {
     WARP_AMBIENT: 40,
     WARP_VELOCITY_FACTOR: 0.54,
     WARP_MAX_SCALE: 150,
-    WARP_RADIUS_BASE: 420,
+    WARP_RADIUS_BASE: 900,
     WARP_RADIUS_VELOCITY_FACTOR: 0.24,
     WARP_SEED_SPEED: 0.08,
     WARP_SEED_VELOCITY_FACTOR: 0.11,
@@ -134,24 +134,27 @@ function initCursorWarp() {
 
     function drawDispMap(cx, cy, radius, phase) {
         const diam = Math.ceil(radius * 2) + 4;
-        if (dispCanvas.width !== diam || dispCanvas.height !== diam) {
-            dispCanvas.width = diam;
-            dispCanvas.height = diam;
+        const scale = 3;
+        const mapW = Math.ceil(diam / scale);
+        const mapH = Math.ceil(diam / scale);
+        if (dispCanvas.width !== mapW || dispCanvas.height !== mapH) {
+            dispCanvas.width = mapW;
+            dispCanvas.height = mapH;
             imageData = null;
         }
-        if (!imageData) imageData = dispCtx.createImageData(diam, diam);
+        if (!imageData) imageData = dispCtx.createImageData(mapW, mapH);
         imageData.data.fill(0);
 
         const half = diam / 2;
-        const wavelength = radius * 1.2;
+        const wavelength = radius * 0.35;
         const radSq = radius * radius;
 
-        for (let y = 0; y < diam; y++) {
-            for (let x = 0; x < diam; x++) {
-                const dx = x - half;
-                const dy = y - half;
+        for (let y = 0; y < mapH; y++) {
+            for (let x = 0; x < mapW; x++) {
+                const dx = x * scale - half;
+                const dy = y * scale - half;
                 const distSq = dx * dx + dy * dy;
-                const idx = (y * diam + x) * 4;
+                const idx = (y * mapW + x) * 4;
                 if (distSq > radSq) {
                     imageData.data[idx] = 128;
                     imageData.data[idx + 1] = 128;

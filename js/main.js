@@ -164,6 +164,8 @@ function initCursorWarp() {
             filter.appendChild(disp);
             warpTurbulence = turb;
             state.warpDisplace = disp;
+            state.warpScale = CONFIG.WARP_AMBIENT;
+            disp.setAttribute('scale', String(CONFIG.WARP_AMBIENT));
             console.log('PDI safari: rebuilt. children=' + filter.childElementCount + ' turb=' + turb.tagName + ' disp=' + disp.tagName + ' scale=' + disp.getAttribute('scale'));
         }
     }

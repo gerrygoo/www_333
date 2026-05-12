@@ -8,11 +8,6 @@ const CONFIG = {
     WARP_AMBIENT: 40,
     WARP_VELOCITY_FACTOR: 0.54,
     WARP_MAX_SCALE: 150,
-    WARP_RADIUS_BASE: 900,
-    WARP_RADIUS_VELOCITY_FACTOR: 0.24,
-    WARP_SEED_SPEED: 0.08,
-    WARP_SEED_VELOCITY_FACTOR: 0.11,
-    WARP_MAX_SEED_INCREMENT: 0.10,
     WARP_RGB_BOOST_THRESHOLD: 3,
     WARP_RGB_BOOST_FACTOR: 0.05,
     ASSETS: [
@@ -44,13 +39,12 @@ const state = {
     filterBlueIntense: null,
     cursorX: 0,
     cursorY: 0,
-    warpSeed: 0,
     warpScale: 0,
     warpSpeed: 0,
     warpPulse: 0,
-    warpDirX: 0,
-    warpDirY: 0,
+    warpTurbOffset: 0,
     hasMouseMoved: false,
+    warpTurbulence: null,
     warpDisplace: null,
     cursorGlow: null,
 };
@@ -127,81 +121,9 @@ function orchestrate() {
 }
 
 function initCursorWarp() {
+    state.warpTurbulence = document.querySelector('#warp-turbulence');
     state.warpDisplace = document.querySelector('#warp-displace');
     state.cursorGlow = document.querySelector('.cursor-glow');
-
-    const dispCanvas = document.createElement('canvas');
-    const dispCtx = dispCanvas.getContext('2d');
-    const warpDispImg = document.querySelector('#warp-disp-img');
-    let imageData = null;
-
-    function drawDispMap(cx, cy, radius, phase, pulse, lagX, lagY) {
-        const diam = Math.ceil(radius * 2) + 4;
-        const scale = 3;
-        const mapW = Math.ceil(diam / scale);
-        const mapH = Math.ceil(diam / scale);
-        if (dispCanvas.width !== mapW || dispCanvas.height !== mapH) {
-            dispCanvas.width = mapW;
-            dispCanvas.height = mapH;
-            imageData = null;
-        }
-        if (!imageData) imageData = dispCtx.createImageData(mapW, mapH);
-        imageData.data.fill(0);
-
-        const half = diam / 2;
-        const wavelength = radius * 0.35;
-        const radSq = radius * radius;
-
-        for (let y = 0; y < mapH; y++) {
-            for (let x = 0; x < mapW; x++) {
-                const dx = x * scale - half;
-                const dy = y * scale - half;
-                const distSq = dx * dx + dy * dy;
-                const idx = (y * mapW + x) * 4;
-                if (distSq > radSq) {
-                    imageData.data[idx] = 128;
-                    imageData.data[idx + 1] = 128;
-                    continue;
-                }
-                const dist = Math.sqrt(distSq);
-                const t = dist / radius;
-                const mask = 0.5 * (1 + Math.cos(t * Math.PI));
-                const phaseDx = dx - lagX;
-                const phaseDy = dy - lagY;
-                const phaseDist = Math.sqrt(phaseDx * phaseDx + phaseDy * phaseDy);
-                const warpedDist = phaseDist * phaseDist / radius;
-                const ripple = Math.sin(warpedDist / wavelength - phase);
-                const dispMag = ripple * mask * pulse;
-                let rVal = 128, gVal = 128;
-                if (dist > 0.5) {
-                    rVal = 128 + Math.round((dx / dist) * dispMag * 127);
-                    gVal = 128 + Math.round((dy / dist) * dispMag * 127);
-                    rVal = Math.max(0, Math.min(255, rVal));
-                    gVal = Math.max(0, Math.min(255, gVal));
-                }
-                imageData.data[idx]     = rVal;
-                imageData.data[idx + 1] = gVal;
-                imageData.data[idx + 2] = 0;
-                imageData.data[idx + 3] = Math.round(mask * 255);
-            }
-        }
-        dispCtx.putImageData(imageData, 0, 0);
-
-        const imgX = Math.round(cx - half);
-        const imgY = Math.round(cy - half);
-        if (warpDispImg) {
-            warpDispImg.setAttribute('x', imgX);
-            warpDispImg.setAttribute('y', imgY);
-            warpDispImg.setAttribute('width', diam);
-            warpDispImg.setAttribute('height', diam);
-            const dataURL = dispCanvas.toDataURL();
-            warpDispImg.setAttribute('href', dataURL);
-            warpDispImg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', dataURL);
-        }
-        if (state.warpDisplace) {
-            state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(1));
-        }
-    }
 
     let prevX = 0;
     let prevY = 0;
@@ -235,11 +157,6 @@ function initCursorWarp() {
         const rawSpeed = Math.sqrt(dx * dx + dy * dy);
         state.warpSpeed = state.warpSpeed + (rawSpeed - state.warpSpeed) * 0.08;
 
-        if (rawSpeed > 0.1) {
-            state.warpDirX += (dx / rawSpeed - state.warpDirX) * 0.15;
-            state.warpDirY += (dy / rawSpeed - state.warpDirY) * 0.15;
-        }
-
         const targetScale = Math.min(
             CONFIG.WARP_AMBIENT + state.warpSpeed * CONFIG.WARP_VELOCITY_FACTOR,
             CONFIG.WARP_MAX_SCALE
@@ -250,17 +167,17 @@ function initCursorWarp() {
         const pulseRate = pulseTarget > state.warpPulse ? 0.08 : 0.019;
         state.warpPulse += (pulseTarget - state.warpPulse) * pulseRate;
 
-        state.warpSeed += Math.min(
-            CONFIG.WARP_SEED_SPEED + state.warpSpeed * CONFIG.WARP_SEED_VELOCITY_FACTOR,
-            CONFIG.WARP_MAX_SEED_INCREMENT
-        ) * state.warpPulse;
-
-        const radius = CONFIG.WARP_RADIUS_BASE + state.warpSpeed * CONFIG.WARP_RADIUS_VELOCITY_FACTOR;
-        const lagStrength = state.warpPulse * Math.min(state.warpSpeed * 3, radius * 0.3);
-        const lagX = -state.warpDirX * lagStrength;
-        const lagY = -state.warpDirY * lagStrength;
-
-        drawDispMap(state.cursorX, state.cursorY, radius, state.warpSeed, state.warpPulse, lagX, lagY);
+        // Slowly drift baseFrequency for organic liquid motion; faster when active
+        state.warpTurbOffset += 0.0035 * (1 + state.warpPulse * 2);
+        const freqX = 0.006 + 0.003 * Math.sin(state.warpTurbOffset);
+        const freqY = 0.005 + 0.002 * Math.cos(state.warpTurbOffset * 0.73);
+        if (state.warpTurbulence) {
+            state.warpTurbulence.setAttribute('baseFrequency', freqX.toFixed(5) + ' ' + freqY.toFixed(5));
+        }
+        if (state.warpDisplace) {
+            const effectiveScale = 5 + state.warpScale * state.warpPulse;
+            state.warpDisplace.setAttribute('scale', effectiveScale.toFixed(1));
+        }
 
         if (state.cursorGlow) {
             state.cursorGlow.style.setProperty('--cx', state.cursorX + 'px');

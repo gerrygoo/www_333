@@ -195,10 +195,33 @@ body {
     }
 }
 
+/* Construction Banner Styles */
+.construction-banner {
+    background-color: yellow;
+    color: #000000;
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.construction-banner p {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
 /* Footer Styles */
 footer {
     text-align: center;
     padding: 2rem 1rem;
+    padding-bottom: 8rem; /* Space reserved for the banner if displayed */
 }
 
 /* --- VISUAL EFFECTS --- */

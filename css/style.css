@@ -198,30 +198,36 @@ body::after {
 
 @keyframes chromatic-aberration {
     0%, 100% { 
-        text-shadow: 1px 0 0 rgba(255,0,0,0.5), -1px 0 0 rgba(0,255,255,0.5);
-        filter: drop-shadow(1px 0 0 rgba(255,0,0,0.3)) drop-shadow(-1px 0 0 rgba(0,255,255,0.3));
+        text-shadow: 2px 0 0 rgba(255,0,0,0.6), -2px 0 0 rgba(0,255,255,0.6);
+        filter: drop-shadow(2px 0 0 rgba(255,0,0,0.4)) drop-shadow(-2px 0 0 rgba(0,255,255,0.4));
+        transform: translate(0, 0);
     }
-    20% { 
-        text-shadow: 2px 0 0 rgba(255,0,0,0.5), -1px 0 0 rgba(0,255,255,0.5);
-        filter: drop-shadow(2px 0 0 rgba(255,0,0,0.3)) drop-shadow(-1px 0 0 rgba(0,255,255,0.3));
+    25% { 
+        text-shadow: -1.5px 0 0 rgba(255,0,0,0.6), 1.5px 0 0 rgba(0,255,255,0.6);
+        filter: drop-shadow(-1.5px 0 0 rgba(255,0,0,0.4)) drop-shadow(1.5px 0 0 rgba(0,255,255,0.4));
+        transform: translate(-1px, 1px);
     }
-    40% { 
-        text-shadow: 1px 0 0 rgba(255,0,0,0.5), -2px 0 0 rgba(0,255,255,0.5);
-        filter: drop-shadow(1px 0 0 rgba(255,0,0,0.3)) drop-shadow(-2px 0 0 rgba(0,255,255,0.3));
+    50% { 
+        text-shadow: 3.5px 0 0 rgba(255,0,0,0.6), -1px 0 0 rgba(0,255,255,0.6);
+        filter: drop-shadow(3.5px 0 0 rgba(255,0,0,0.4)) drop-shadow(-1px 0 0 rgba(0,255,255,0.4));
+        transform: translate(1px, -1px);
     }
-    60% { 
-        text-shadow: 0.5px 0 0 rgba(255,0,0,0.5), -0.5px 0 0 rgba(0,255,255,0.5);
-        filter: drop-shadow(0.5px 0 0 rgba(255,0,0,0.3)) drop-shadow(-0.5px 0 0 rgba(0,255,255,0.3));
-    }
-    80% { 
-        text-shadow: 3px 0 0 rgba(255,0,0,0.5), -2px 0 0 rgba(0,255,255,0.5);
-        filter: drop-shadow(3px 0 0 rgba(255,0,0,0.3)) drop-shadow(-2px 0 0 rgba(0,255,255,0.3));
+    75% { 
+        text-shadow: -2.5px 0 0 rgba(255,0,0,0.6), 2.5px 0 0 rgba(0,255,255,0.6);
+        filter: drop-shadow(-2.5px 0 0 rgba(255,0,0,0.4)) drop-shadow(2.5px 0 0 rgba(0,255,255,0.4));
+        transform: translate(-1px, -1px);
     }
 }
 
 .hero__logo,
-.hero__tagline-group {
-    animation: chromatic-aberration 0.2s infinite steps(2);
+.hero__tagline,
+.instagram-link {
+    animation: chromatic-aberration 0.15s infinite steps(2);
+}
+
+/* Global container jitter during glitch bursts */
+.is-glitching .hero {
+    animation: chromatic-aberration 0.05s infinite steps(1);
 }
 
 .hero__logo {
@@ -230,7 +236,7 @@ body::after {
 
 /* Chromatic Aberration intensifies on Logo during glitch burst */
 .is-glitching .hero__logo {
-    filter: drop-shadow(4px 0 0 rgba(255,0,0,0.7)) drop-shadow(-4px 0 0 rgba(0,255,255,0.7));
+    filter: drop-shadow(6px 0 0 rgba(255,0,0,0.8)) drop-shadow(-6px 0 0 rgba(0,255,255,0.8));
 }
 
 @keyframes glitch {

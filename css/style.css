@@ -152,16 +152,11 @@ body {
     }
 
     .hero {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 50vh;
         padding: 0 2rem;
     }
 
     .hero__logo {
-        font-size: 4rem;
+        max-width: 600px;
     }
 }
 
@@ -436,6 +431,20 @@ footer {
 .project-record dd {
     margin: 0;
     font-family: "Courier New", Courier, monospace;
+}
+
+.project-record:hover {
+    background-color: #ffffff;
+    color: #000000;
+    transform: translate(4px, -4px);
+    box-shadow: -4px 4px 0px #ff00ff;
+    cursor: crosshair;
+}
+
+.project-record:hover dt {
+    color: #333333;
+}
+ New", Courier, monospace;
 }
 
 .project-record:hover {

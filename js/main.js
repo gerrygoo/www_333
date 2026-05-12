@@ -7,7 +7,7 @@ const CONFIG = {
     // How often to check if a glitch should start (in ms)
     GLITCH_CHECK_INTERVAL: 3000,
     // Probability of a glitch burst starting (0.0 to 1.0)
-    GLITCH_PROBABILITY: 0.3,
+    GLITCH_PROBABILITY: 0.66,
     // How long a glitch burst lasts (in ms)
     GLITCH_DURATION: 800,
     // Interval between asset swaps during a burst (in ms)

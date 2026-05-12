@@ -1,4 +1,4 @@
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 
 const CONFIG = {
     GLITCH_WAIT_MIN: 400,
@@ -133,6 +133,7 @@ function initCursorWarp() {
     state.cursorGlow = document.querySelector('.cursor-glow');
 
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    console.log('PDI warp: isSafari=' + isSafari + ' ua=' + navigator.userAgent.slice(0, 80));
     let warpTurbulence = null;
     let turbOffset = 0;
 
@@ -323,7 +324,7 @@ function initCursorWarp() {
                 warpTurbulence.setAttribute('baseFrequency', freqX.toFixed(5) + ' ' + freqY.toFixed(5));
             }
             if (state.warpDisplace) {
-                state.warpDisplace.setAttribute('scale', (5 + state.warpScale * state.warpPulse).toFixed(1));
+                state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(1));
             }
         } else {
             if (state.warpDisplace) {

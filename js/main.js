@@ -17,6 +17,14 @@ const CONFIG = {
     WARP_MAX_SEED_INCREMENT: 0.10,
     WARP_RGB_BOOST_THRESHOLD: 3,
     WARP_RGB_BOOST_FACTOR: 0.05,
+    NOISE_DENSITY_AMBIENT: 0.07,
+    NOISE_DENSITY_BURST: 0.22,
+    NOISE_FPS_AMBIENT: 15,
+    NOISE_FPS_BURST: 30,
+    NOISE_BURST_DURATION: 600,
+    NOISE_BURST_WAIT_MIN: 2000,
+    NOISE_BURST_WAIT_MAX: 8000,
+    NOISE_BURST_PROBABILITY: 0.6,
     ASSETS: [
         'images/symbols/texturelabs_vector_136.svg',
         'images/symbols/texturelabs_vector_140.svg',
@@ -55,6 +63,8 @@ const state = {
     hasMouseMoved: false,
     warpDisplace: null,
     cursorGlow: null,
+    isNoising: false,
+    noiseInterval: null,
 };
 
 function preloadAssets() {

@@ -48,6 +48,8 @@ const state = {
     warpScale: 0,
     warpSpeed: 0,
     warpPulse: 0,
+    warpDirX: 0,
+    warpDirY: 0,
     hasMouseMoved: false,
     warpDisplace: null,
     cursorGlow: null,
@@ -133,7 +135,7 @@ function initCursorWarp() {
     const warpDispImg = document.querySelector('#warp-disp-img');
     let imageData = null;
 
-    function drawDispMap(cx, cy, radius, phase, pulse) {
+    function drawDispMap(cx, cy, radius, phase, pulse, lagX, lagY) {
         const diam = Math.ceil(radius * 2) + 4;
         const scale = 3;
         const mapW = Math.ceil(diam / scale);
@@ -164,7 +166,10 @@ function initCursorWarp() {
                 const dist = Math.sqrt(distSq);
                 const t = dist / radius;
                 const mask = 0.5 * (1 + Math.cos(t * Math.PI));
-                const warpedDist = radius * (t * t);
+                const phaseDx = dx - lagX;
+                const phaseDy = dy - lagY;
+                const phaseDist = Math.sqrt(phaseDx * phaseDx + phaseDy * phaseDy);
+                const warpedDist = phaseDist * phaseDist / radius;
                 const ripple = Math.sin(warpedDist / wavelength - phase);
                 const dispMag = ripple * mask * pulse;
                 let rVal = 128, gVal = 128;
@@ -228,6 +233,11 @@ function initCursorWarp() {
         const rawSpeed = Math.sqrt(dx * dx + dy * dy);
         state.warpSpeed = state.warpSpeed + (rawSpeed - state.warpSpeed) * 0.08;
 
+        if (rawSpeed > 0.1) {
+            state.warpDirX += (dx / rawSpeed - state.warpDirX) * 0.15;
+            state.warpDirY += (dy / rawSpeed - state.warpDirY) * 0.15;
+        }
+
         const targetScale = Math.min(
             CONFIG.WARP_AMBIENT + state.warpSpeed * CONFIG.WARP_VELOCITY_FACTOR,
             CONFIG.WARP_MAX_SCALE
@@ -244,8 +254,11 @@ function initCursorWarp() {
         ) * state.warpPulse;
 
         const radius = CONFIG.WARP_RADIUS_BASE + state.warpSpeed * CONFIG.WARP_RADIUS_VELOCITY_FACTOR;
+        const lagStrength = state.warpPulse * Math.min(state.warpSpeed * 3, radius * 0.3);
+        const lagX = -state.warpDirX * lagStrength;
+        const lagY = -state.warpDirY * lagStrength;
 
-        drawDispMap(state.cursorX, state.cursorY, radius, state.warpSeed, state.warpPulse);
+        drawDispMap(state.cursorX, state.cursorY, radius, state.warpSeed, state.warpPulse, lagX, lagY);
 
         if (state.cursorGlow) {
             state.cursorGlow.style.setProperty('--cx', state.cursorX + 'px');

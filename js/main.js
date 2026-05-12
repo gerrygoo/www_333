@@ -12,6 +12,7 @@ const CONFIG = {
     WARP_RADIUS_VELOCITY_FACTOR: 0.24,
     WARP_SEED_SPEED: 0.08,
     WARP_SEED_VELOCITY_FACTOR: 0.11,
+    WARP_MAX_SEED_INCREMENT: 0.20,
     WARP_RGB_BOOST_THRESHOLD: 3,
     WARP_RGB_BOOST_FACTOR: 0.05,
     ASSETS: [
@@ -142,7 +143,7 @@ function initCursorWarp() {
         imageData.data.fill(0);
 
         const half = diam / 2;
-        const wavelength = radius * 0.6;
+        const wavelength = radius * 1.2;
         const radSq = radius * radius;
 
         for (let y = 0; y < diam; y++) {
@@ -228,7 +229,10 @@ function initCursorWarp() {
         );
         state.warpScale = state.warpScale + (targetScale - state.warpScale) * 0.05;
 
-        state.warpSeed += CONFIG.WARP_SEED_SPEED + state.warpSpeed * CONFIG.WARP_SEED_VELOCITY_FACTOR;
+        state.warpSeed += Math.min(
+            CONFIG.WARP_SEED_SPEED + state.warpSpeed * CONFIG.WARP_SEED_VELOCITY_FACTOR,
+            CONFIG.WARP_MAX_SEED_INCREMENT
+        );
 
         const radius = CONFIG.WARP_RADIUS_BASE + state.warpSpeed * CONFIG.WARP_RADIUS_VELOCITY_FACTOR;
 

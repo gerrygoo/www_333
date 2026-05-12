@@ -194,6 +194,7 @@ function initCursorWarp() {
         const uLag   = gl.getUniformLocation(prog, 'u_lag');
 
         let lastDiam = -1;
+        let prevBlobURL = null;
 
         drawDispMap = function(cx, cy, radius, phase, pulse, lagX, lagY) {
             if (glLost) return;
@@ -213,9 +214,13 @@ function initCursorWarp() {
                     warpDispImg.setAttribute('height', diam);
                     lastDiam = diam;
                 }
-                const dataURL = glCanvas.toDataURL();
-                warpDispImg.setAttribute('href', dataURL);
-                warpDispImg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', dataURL);
+                glCanvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
+                    warpDispImg.setAttribute('href', url);
+                    warpDispImg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', url);
+                    if (prevBlobURL) URL.revokeObjectURL(prevBlobURL);
+                    prevBlobURL = url;
+                });
             }
         };
     }

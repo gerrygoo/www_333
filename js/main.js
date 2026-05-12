@@ -8,7 +8,7 @@ const CONFIG = {
     WARP_AMBIENT: 40,
     WARP_VELOCITY_FACTOR: 0.9,
     WARP_MAX_SCALE: 150,
-    WARP_RADIUS_BASE: 140,
+    WARP_RADIUS_BASE: 420,
     WARP_RADIUS_VELOCITY_FACTOR: 0.4,
     WARP_SEED_SPEED: 0.08,
     WARP_SEED_VELOCITY_FACTOR: 0.18,
@@ -142,7 +142,7 @@ function initCursorWarp() {
         imageData.data.fill(0);
 
         const half = diam / 2;
-        const wavelength = radius * 0.45;
+        const wavelength = radius * 0.6;
         const radSq = radius * radius;
 
         for (let y = 0; y < diam; y++) {

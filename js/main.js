@@ -49,7 +49,6 @@ const state = {
     hasMouseMoved: false,
     warpTurbulence: null,
     warpDisplace: null,
-    cursorMaskGrad: null,
     cursorGlow: null,
 };
 
@@ -127,14 +126,33 @@ function orchestrate() {
 function initCursorWarp() {
     state.warpTurbulence = document.querySelector('#warp-turbulence');
     state.warpDisplace = document.querySelector('#warp-displace');
-    state.cursorMaskGrad = document.querySelector('#cursor-mask-grad');
     state.cursorGlow = document.querySelector('.cursor-glow');
+
+    const maskCanvas = document.createElement('canvas');
+    const maskCtx = maskCanvas.getContext('2d');
+    const warpMaskImg = document.querySelector('#warp-mask-img');
+
+    function updateMaskCanvas(cx, cy, r) {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        if (maskCanvas.width !== w || maskCanvas.height !== h) {
+            maskCanvas.width = w;
+            maskCanvas.height = h;
+        }
+        maskCtx.clearRect(0, 0, w, h);
+        const grad = maskCtx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        grad.addColorStop(0, 'rgba(255,255,255,1)');
+        grad.addColorStop(0.7, 'rgba(255,255,255,0.15)');
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        maskCtx.fillStyle = grad;
+        maskCtx.fillRect(0, 0, w, h);
+        if (warpMaskImg) warpMaskImg.setAttribute('href', maskCanvas.toDataURL());
+    }
 
     // Set filter and feImage to explicit px dimensions so filterUnits="userSpaceOnUse"
     // resolves correctly (percentage attrs on feImage resolve against the hidden SVG's
     // 0×0 viewport otherwise, clipping the mask to nothing).
     const warpFilter = document.querySelector('#cursor-warp');
-    const warpMaskImg = document.querySelector('#warp-mask-img');
     function setWarpDimensions() {
         const w = window.innerWidth;
         const h = window.innerHeight;
@@ -188,11 +206,7 @@ function initCursorWarp() {
 
         if (state.warpTurbulence) state.warpTurbulence.setAttribute('seed', seed);
         if (state.warpDisplace) state.warpDisplace.setAttribute('scale', state.warpScale.toFixed(2));
-        if (state.cursorMaskGrad) {
-            state.cursorMaskGrad.setAttribute('cx', state.cursorX);
-            state.cursorMaskGrad.setAttribute('cy', state.cursorY);
-            state.cursorMaskGrad.setAttribute('r', radius.toFixed(1));
-        }
+        updateMaskCanvas(state.cursorX, state.cursorY, radius);
         if (state.cursorGlow) {
             state.cursorGlow.style.setProperty('--cx', state.cursorX + 'px');
             state.cursorGlow.style.setProperty('--cy', state.cursorY + 'px');

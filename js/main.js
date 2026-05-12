@@ -47,6 +47,7 @@ const state = {
     warpSeed: 0,
     warpScale: 0,
     warpSpeed: 0,
+    warpPulse: 0,
     hasMouseMoved: false,
     warpDisplace: null,
     cursorGlow: null,
@@ -132,7 +133,7 @@ function initCursorWarp() {
     const warpDispImg = document.querySelector('#warp-disp-img');
     let imageData = null;
 
-    function drawDispMap(cx, cy, radius, phase) {
+    function drawDispMap(cx, cy, radius, phase, pulse) {
         const diam = Math.ceil(radius * 2) + 4;
         const scale = 3;
         const mapW = Math.ceil(diam / scale);
@@ -165,7 +166,7 @@ function initCursorWarp() {
                 const mask = 0.5 * (1 + Math.cos(t * Math.PI));
                 const warpedDist = radius * (t * t);
                 const ripple = Math.sin(warpedDist / wavelength - phase);
-                const dispMag = ripple * mask;
+                const dispMag = ripple * mask * pulse;
                 let rVal = 128, gVal = 128;
                 if (dist > 0.5) {
                     rVal = 128 + Math.round((dx / dist) * dispMag * 127);
@@ -233,14 +234,18 @@ function initCursorWarp() {
         );
         state.warpScale = state.warpScale + (targetScale - state.warpScale) * 0.05;
 
+        const pulseTarget = state.warpSpeed > 0.5 ? 1.0 : 0.0;
+        const pulseRate = pulseTarget > state.warpPulse ? 0.08 : 0.019;
+        state.warpPulse += (pulseTarget - state.warpPulse) * pulseRate;
+
         state.warpSeed += Math.min(
             CONFIG.WARP_SEED_SPEED + state.warpSpeed * CONFIG.WARP_SEED_VELOCITY_FACTOR,
             CONFIG.WARP_MAX_SEED_INCREMENT
-        );
+        ) * state.warpPulse;
 
         const radius = CONFIG.WARP_RADIUS_BASE + state.warpSpeed * CONFIG.WARP_RADIUS_VELOCITY_FACTOR;
 
-        drawDispMap(state.cursorX, state.cursorY, radius, state.warpSeed);
+        drawDispMap(state.cursorX, state.cursorY, radius, state.warpSeed, state.warpPulse);
 
         if (state.cursorGlow) {
             state.cursorGlow.style.setProperty('--cx', state.cursorX + 'px');

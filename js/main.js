@@ -91,12 +91,14 @@ function animateFilters() {
     } else {
         const offset = 3.6 + Math.random() * 8.4;
         const dy = offset * Math.random() * 0.3;
+        const rgbBoost = Math.max(0, state.warpSpeed - CONFIG.WARP_RGB_BOOST_THRESHOLD) * CONFIG.WARP_RGB_BOOST_FACTOR;
+        const effectiveOffset = offset * (1 + rgbBoost);
         if (state.filterRedBaseline) {
-            state.filterRedBaseline.setAttribute('dx', (-offset).toFixed(1));
+            state.filterRedBaseline.setAttribute('dx', (-effectiveOffset).toFixed(1));
             state.filterRedBaseline.setAttribute('dy', (-dy).toFixed(1));
         }
         if (state.filterBlueBaseline) {
-            state.filterBlueBaseline.setAttribute('dx', offset.toFixed(1));
+            state.filterBlueBaseline.setAttribute('dx', effectiveOffset.toFixed(1));
             state.filterBlueBaseline.setAttribute('dy', dy.toFixed(1));
         }
         setTimeout(animateFilters, 80 + Math.random() * 210);

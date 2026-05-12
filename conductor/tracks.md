@@ -4,15 +4,12 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## Planned Tracks
-
-- [ ] **Track: Signal-less CRT Noise Effect**
-  _Status: backlog — not yet specced_
-  Ambient noise/static overlay that reads as CRT signal degradation without being tied to a glitch burst. Always-on, organic, non-patterned. Separate from scanlines (which are regular/repeating).
-
----
-
 ## Completed Tracks
+
+- [x] **Track: Signal-less CRT Noise Effect**
+*Link: [./conductor/tracks/signal_less_crt_noise_20260512/](./conductor/tracks/signal_less_crt_noise_20260512/)*
+
+- [x] **Track: Asset Integration & CRT Polish**
 
 - [x] **Track: Asset Integration & CRT Polish**
 *Link: [./conductor/tracks/asset_crt_integration_20260512/](./conductor/tracks/asset_crt_integration_20260512/)*

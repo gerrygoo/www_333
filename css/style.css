@@ -137,9 +137,29 @@ body {
 
 /* Footer Styles */
 footer {
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    width: 100%;
     text-align: center;
-    padding: 2rem 1rem;
-    padding-bottom: 8rem; /* Ensure space for fixed banner */
+    z-index: 10;
+}
+
+.instagram-link {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.9rem;
+    color: #888888;
+}
+
+.instagram-link a {
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: 1px solid #ffffff;
+}
+
+.instagram-link a:hover {
+    background-color: #ffffff;
+    color: #000000;
 }
 
 /* --- VISUAL EFFECTS --- */

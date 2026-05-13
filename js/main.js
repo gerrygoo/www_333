@@ -1,4 +1,4 @@
-const VERSION = '1.1.1-3a79688';
+const VERSION = '1.1.1-ed8a2a7';
 
 const CONFIG = {
     GLITCH_WAIT_MIN: 400,
@@ -8,6 +8,8 @@ const CONFIG = {
     SWAP_INTERVAL: 100,
     ORIGINAL_LOGO: 'images/logos/pdi_logo_v2.6_black.png',
     WARP_AMBIENT: 52,
+    WARP_RINGS: 2.0,
+    WARP_RING_SCALE: 0.75,
     WARP_VELOCITY_FACTOR: 0.54,
     WARP_MAX_SCALE: 150,
     WARP_RADIUS_BASE: 900,
@@ -180,7 +182,7 @@ function initCursorWarp() {
         const fs = gl.createShader(gl.FRAGMENT_SHADER);
         gl.shaderSource(fs, `
             precision mediump float;
-            uniform float u_r,u_phase,u_pulse;
+            uniform float u_r,u_phase,u_pulse,u_rings,u_rscale;
             uniform vec2 u_lag;
             void main(){
                 float diam=u_r*2.+4.;
@@ -188,7 +190,8 @@ function initCursorWarp() {
                 float dist=length(d);
                 if(dist>u_r){gl_FragColor=vec4(.502,.502,0.,0.);return;}
                 float t=dist/u_r;
-                float mask=.5*(1.+cos(t*3.14159265));
+                float t_r=t/u_rscale;
+                float mask=t<u_rscale?sin(t_r*3.14159265*u_rings)*(1.-t*.5):0.;
                 vec2 ld=d-u_lag;
                 float pd=length(ld);
                 float wd=pd*pd/u_r;
@@ -198,7 +201,7 @@ function initCursorWarp() {
                 gl_FragColor=vec4(
                     clamp(.502+dir.x*mag*.498,0.,1.),
                     clamp(.502+dir.y*mag*.498,0.,1.),
-                    0.,mask);
+                    0.,abs(mask));
             }
         `);
         gl.compileShader(fs);
@@ -220,6 +223,10 @@ function initCursorWarp() {
         const uPhase = gl.getUniformLocation(prog, 'u_phase');
         const uPulse = gl.getUniformLocation(prog, 'u_pulse');
         const uLag   = gl.getUniformLocation(prog, 'u_lag');
+        const uRings  = gl.getUniformLocation(prog, 'u_rings');
+        const uRscale = gl.getUniformLocation(prog, 'u_rscale');
+        gl.uniform1f(uRings,  CONFIG.WARP_RINGS);
+        gl.uniform1f(uRscale, CONFIG.WARP_RING_SCALE);
 
         let lastDiam = -1;
         let prevBlobURL = null;

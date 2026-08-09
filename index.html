@@ -50,8 +50,7 @@
         </filter>
         <filter id="cursor-warp-s" x="0" y="0" width="100%" height="100%" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
           <feTurbulence id="warp-s-turb" type="fractalNoise" baseFrequency="0.006 0.005" numOctaves="3" seed="42" result="noise"/>
-          <feDisplacementMap id="warp-s-disp" in="SourceGraphic" in2="noise" scale="52" xChannelSelector="R" yChannelSelector="G"/>
-          <feFlood flood-color="red" flood-opacity="1"/>
+          <feDisplacementMap id="warp-s-disp" in="SourceGraphic" in2="noise" scale="40" xChannelSelector="R" yChannelSelector="G"/>
         </filter>
         <filter id="cursor-warp" x="0" y="0" width="100%" height="100%" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
           <feImage id="warp-disp-img" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="dispmap"/>

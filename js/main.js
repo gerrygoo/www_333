@@ -1,4 +1,4 @@
-const VERSION = '1.1.2';
+const VERSION = '1.1.2-f3bf829';
 
 const CONFIG = {
     GLITCH_WAIT_MIN: 400,

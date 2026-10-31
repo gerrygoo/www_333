@@ -1,9 +1,11 @@
 # PDI — Claude Code Instructions
 
 ## Stack constraints
-Pure static site. No bundler, no framework, no dependencies, no build step.
-All code lives in `index.html`, `css/style.css`, `js/main.js`.
-Deployed via GitHub Pages (CNAME). Do not introduce Node, npm, or any toolchain.
+Pure static site. No bundler, no framework, no build step.
+All code lives in `index.html`, `css/style.css`, `js/main.js` (an ES module).
+The one runtime dependency is Three.js, loaded from jsDelivr via the `<script type="importmap">`
+in `index.html`, pinned to an exact version. Deployed via GitHub Pages (CNAME).
+Do not introduce Node, npm, or any toolchain.
 
 ## Aesthetic
 "Cursed Database" — structured data corrupted by paranormal elements.

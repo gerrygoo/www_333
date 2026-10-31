@@ -1,6 +1,33 @@
 # Visual Effects Reference
 
-All effects active on the PDI landing page. Two modes: **baseline** (always on) and **burst** (during `.is-glitching` body class).
+Since v2.0.0 the site opens on a first-person 3D room (Three.js). The original landing page is now
+"the tape": it plays on the in-room CRT and appears full-screen (`#site`) when the player sits and
+watches. Sections below the 3D table describe the tape.
+
+## 3D room (`initWorld()` in `main.js`)
+
+| Effect | Implementation | Key Config / Values |
+|---|---|---|
+| **Low-res render** | Scene → `WebGLRenderTarget` (HalfFloat, nearest) → post quad | `ROOM.RT_HEIGHT` 400px internal height |
+| **Camcorder post pass** | `makePost()` fragment shader | tube bulge 0.12, chroma 0.006 (+0.03 glitch), grain 0.06 (+0.18 glitch), ~70% desaturated, 2px scanlines, vignette, line tears during glitch |
+| **Camera glitch coupling** | `world.camGlitch` set at each tape burst onset | 18% chance of full-strength burst, else 0.25 × proximity to TV (0 at 6m) |
+| **TV screen** | `makeTVScreen()` → 512×384 `CanvasTexture` at `ROOM.TV_FPS` 30 | logo/glyph RGB split (additive red/blue copies), mirrors `animateFilters` split ranges, glyph swap on `state.isGlitching`, static 0.13 / 0.42 burst, rolling bar, 3px scanlines, line tears |
+| **TV light** | SpotLight (shadowed) + PointLight fill on the CRT | intensity 9 × `screen.brightness` (≈0.55 steady, 0.5–1.4 burst) |
+| **Flashlight** | Shadowed SpotLight on a lagging rig (`F` toggles) | intensity 15, angle 0.45, penumbra 0.75; flickers on strong camera glitches |
+| **Moonlight** | Shadowed SpotLight outside the boarded east window | intensity 60, stripes through 4 boards |
+| **Door leak** | Emissive strip + dim PointLight under the south door | 0.25, occasional dip |
+| **Swaying bulb** | Pivot rotation | ±0.05 rad, jitters during glitch |
+| **Wall chalk** | First 8 glyph SVGs → scuffed alphaMaps on 6 wall decals | opacity 0.55, visible mainly under flashlight |
+| **Audio** | WebAudio, generated | positional band-passed static at TV (louder on burst), 15.7 kHz whine, 41/43.7/82 Hz drone; `M` mutes |
+| **Shadows** | `BasicShadowMap` | hard and aliased on purpose |
+
+Interaction: `[E]`/click while looking at the armchair → sit; seated `[E]` → camera pushes into the screen → `#site`; `Esc` / "look away" → back in the chair; `[Q]` stands. Touch: left pad + drag-look + action button.
+
+---
+
+## The tape
+
+All effects active on the original landing page (now shown inside `#site`). Two modes: **baseline** (always on) and **burst** (during `.is-glitching` body class).
 
 ---
 
@@ -51,6 +78,8 @@ Standard terms used across effect descriptions and tuning notes.
 ---
 
 ## Low-fi overrides
+
+The tape's effect loops (`initCursorWarp`, `initCrtNoise`, `animateFilters`) start the first time `#site` opens and idle on `state.siteActive` while the player is in the room. `orchestrate()` runs from load because it also drives the TV.
 
 `body.low-fi` disables: scanlines, `body::after` vignette, `visual-effects-overlay`, logo swap, filter animation (JS guard in `main.js`).
 

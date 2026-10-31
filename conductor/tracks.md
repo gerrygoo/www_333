@@ -4,6 +4,10 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+## Active Tracks
+
+- [ ] **Track: 3D Room (v2.0.0)** — first-person dark room; the landing page plays on a CRT and opens when you sit and watch. Open: final "site access" UX, more paranormal events, perf pass on low-end mobile.
+
 ## Completed Tracks
 
 - [x] **Track: Signal-less CRT Noise Effect**

@@ -10,68 +10,108 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
+    <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js" } }
+    </script>
 </head>
 <body>
-    <div class="visual-effects-overlay scanlines"></div>
-    <canvas id="crt-noise"></canvas>
-    <div class="cursor-glow"></div>
-    
-    <!-- CRT RGB Split Filter -->
-    <svg class="svg-filters" aria-hidden="true" focusable="false">
-      <defs>
-        <filter id="rgb-split">
-          <feOffset in="SourceGraphic" dx="-6" dy="0" result="red"/>
-          <feOffset in="SourceGraphic" dx="6" dy="0" result="blue"/>
-          <feComponentTransfer in="red" result="red-only">
-            <feFuncG type="table" tableValues="0 0"/>
-            <feFuncB type="table" tableValues="0 0"/>
-          </feComponentTransfer>
-          <feComponentTransfer in="blue" result="blue-only">
-            <feFuncR type="table" tableValues="0 0"/>
-            <feFuncG type="table" tableValues="0 0"/>
-          </feComponentTransfer>
-          <feBlend in="red-only" in2="blue-only" mode="screen" result="split"/>
-          <feBlend in="split" in2="SourceGraphic" mode="screen"/>
-        </filter>
-        
-        <filter id="rgb-split-intense">
-          <feOffset in="SourceGraphic" dx="-15" dy="0" result="red"/>
-          <feOffset in="SourceGraphic" dx="15" dy="0" result="blue"/>
-          <feComponentTransfer in="red" result="red-only">
-            <feFuncG type="table" tableValues="0 0"/>
-            <feFuncB type="table" tableValues="0 0"/>
-          </feComponentTransfer>
-          <feComponentTransfer in="blue" result="blue-only">
-            <feFuncR type="table" tableValues="0 0"/>
-            <feFuncG type="table" tableValues="0 0"/>
-          </feComponentTransfer>
-          <feBlend in="red-only" in2="blue-only" mode="screen" result="split"/>
-          <feBlend in="split" in2="SourceGraphic" mode="screen"/>
-        </filter>
-        <filter id="cursor-warp-s" x="0" y="0" width="100%" height="100%" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-          <feTurbulence id="warp-s-turb" type="fractalNoise" baseFrequency="0.006 0.005" numOctaves="3" seed="42" result="noise"/>
-          <feDisplacementMap id="warp-s-disp" in="SourceGraphic" in2="noise" scale="52" xChannelSelector="R" yChannelSelector="G"/>
-          <feFlood flood-color="red" flood-opacity="1"/>
-        </filter>
-        <filter id="cursor-warp" x="0" y="0" width="100%" height="100%" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-          <feImage id="warp-disp-img" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="dispmap"/>
-          <feDisplacementMap id="warp-displace" in="SourceGraphic" in2="dispmap" scale="1" xChannelSelector="R" yChannelSelector="G" result="warped"/>
-          <feComposite in="warped" in2="dispmap" operator="in" result="localized"/>
-          <feComposite in="SourceGraphic" in2="dispmap" operator="out" result="bg"/>
-          <feComposite in="localized" in2="bg" operator="over"/>
-        </filter>
-      </defs>
-    </svg>
+    <!-- ============ 3D ROOM ============ -->
+    <canvas id="world" aria-hidden="true"></canvas>
 
-    <main class="hero">
-        <div class="hero__logo-wrap">
-            <img src="images/logos/pdi_logo_v2.6_black.png" alt="Paranormal Dynamics Inc. Logo" class="hero__logo">
+    <div id="hud" class="hud" aria-hidden="true">
+        <div class="hud__corner hud__corner--tl"></div>
+        <div class="hud__corner hud__corner--tr"></div>
+        <div class="hud__corner hud__corner--bl"></div>
+        <div class="hud__corner hud__corner--br"></div>
+        <div class="hud__rec"><span class="hud__rec-dot"></span>REC</div>
+        <div class="hud__time" id="hud-time">00:00:00</div>
+        <div class="hud__cam">CAM_01 · LIVING RM</div>
+        <div class="hud__reticle"></div>
+        <div class="hud__prompt" id="hud-prompt"></div>
+    </div>
+
+    <div id="touch" class="touch" aria-hidden="true">
+        <div class="touch__stick" id="touch-stick"><div class="touch__knob" id="touch-knob"></div></div>
+        <button class="touch__act" id="touch-act" type="button">E</button>
+    </div>
+
+    <div id="gate" class="gate">
+        <div class="gate__inner">
+            <p class="gate__title">PARANORMAL DYNAMICS INC.</p>
+            <p class="gate__sub">case file 0333 — residential, unit 4b</p>
+            <button class="gate__enter" id="gate-enter" type="button">[ ENTER ]</button>
+            <p class="gate__keys" id="gate-keys">WASD move · MOUSE look · SHIFT run · E interact · F flashlight · M sound</p>
+            <button class="gate__skip" id="gate-skip" type="button">skip to the tape &rarr;</button>
         </div>
-        <div class="hero__tagline-group">
-            <p class="hero__tagline">designer films and exorcisms</p>
-            <a href="https://instagram.com/paranormal_dynamics_inc" target="_blank" rel="noopener noreferrer" class="instagram-link">@paranormal_dynamics_inc</a>
-        </div>
-    </main>
-    <script src="js/main.js"></script>
+    </div>
+
+    <div id="fade" class="fade"></div>
+
+    <!-- ============ THE TAPE (original landing page, shown when watching the TV) ============ -->
+    <div id="site" class="site">
+        <button class="site__leave" id="site-leave" type="button">[ ESC ] look away</button>
+        <div class="visual-effects-overlay scanlines"></div>
+        <canvas id="crt-noise"></canvas>
+        <div class="cursor-glow"></div>
+
+        <!-- CRT RGB Split Filter -->
+        <svg class="svg-filters" aria-hidden="true" focusable="false">
+          <defs>
+            <filter id="rgb-split">
+              <feOffset in="SourceGraphic" dx="-6" dy="0" result="red"/>
+              <feOffset in="SourceGraphic" dx="6" dy="0" result="blue"/>
+              <feComponentTransfer in="red" result="red-only">
+                <feFuncG type="table" tableValues="0 0"/>
+                <feFuncB type="table" tableValues="0 0"/>
+              </feComponentTransfer>
+              <feComponentTransfer in="blue" result="blue-only">
+                <feFuncR type="table" tableValues="0 0"/>
+                <feFuncG type="table" tableValues="0 0"/>
+              </feComponentTransfer>
+              <feBlend in="red-only" in2="blue-only" mode="screen" result="split"/>
+              <feBlend in="split" in2="SourceGraphic" mode="screen"/>
+            </filter>
+
+            <filter id="rgb-split-intense">
+              <feOffset in="SourceGraphic" dx="-15" dy="0" result="red"/>
+              <feOffset in="SourceGraphic" dx="15" dy="0" result="blue"/>
+              <feComponentTransfer in="red" result="red-only">
+                <feFuncG type="table" tableValues="0 0"/>
+                <feFuncB type="table" tableValues="0 0"/>
+              </feComponentTransfer>
+              <feComponentTransfer in="blue" result="blue-only">
+                <feFuncR type="table" tableValues="0 0"/>
+                <feFuncG type="table" tableValues="0 0"/>
+              </feComponentTransfer>
+              <feBlend in="red-only" in2="blue-only" mode="screen" result="split"/>
+              <feBlend in="split" in2="SourceGraphic" mode="screen"/>
+            </filter>
+            <filter id="cursor-warp-s" x="0" y="0" width="100%" height="100%" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feTurbulence id="warp-s-turb" type="fractalNoise" baseFrequency="0.006 0.005" numOctaves="3" seed="42" result="noise"/>
+              <feDisplacementMap id="warp-s-disp" in="SourceGraphic" in2="noise" scale="52" xChannelSelector="R" yChannelSelector="G"/>
+              <feFlood flood-color="red" flood-opacity="1"/>
+            </filter>
+            <filter id="cursor-warp" x="0" y="0" width="100%" height="100%" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feImage id="warp-disp-img" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="dispmap"/>
+              <feDisplacementMap id="warp-displace" in="SourceGraphic" in2="dispmap" scale="1" xChannelSelector="R" yChannelSelector="G" result="warped"/>
+              <feComposite in="warped" in2="dispmap" operator="in" result="localized"/>
+              <feComposite in="SourceGraphic" in2="dispmap" operator="out" result="bg"/>
+              <feComposite in="localized" in2="bg" operator="over"/>
+            </filter>
+          </defs>
+        </svg>
+
+        <main class="hero">
+            <div class="hero__logo-wrap">
+                <img src="images/logos/pdi_logo_v2.6_black.png" alt="Paranormal Dynamics Inc. Logo" class="hero__logo">
+            </div>
+            <div class="hero__tagline-group">
+                <p class="hero__tagline">designer films and exorcisms</p>
+                <a href="https://instagram.com/paranormal_dynamics_inc" target="_blank" rel="noopener noreferrer" class="instagram-link">@paranormal_dynamics_inc</a>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

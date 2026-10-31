@@ -21,7 +21,7 @@ watches. Sections below the 3D table describe the tape.
 | **Audio** | WebAudio, generated | positional band-passed static at TV (louder on burst), 15.7 kHz whine, 41/43.7/82 Hz drone; `M` mutes |
 | **Shadows** | `BasicShadowMap` | hard and aliased on purpose |
 
-Interaction: `[E]`/click while looking at the armchair → sit; seated `[E]` → camera pushes into the screen → `#site`; `Esc` / "look away" → back in the chair; `[Q]` stands. Touch: left pad + drag-look + action button.
+Interaction: `[E]`/click while looking at the armchair → sit; seated `[E]` → camera pushes into the screen → `#site`; `Esc` / "look away" → back in the chair. Stand up with `Q`, `C`, `Space`, any movement key, or right-click. Touch: left pad + drag-look + action button, plus a STAND button while seated. If pointer lock is lost (Esc can't re-grab it), the seated prompt shows `[CLICK] TO LOOK AROUND`.
 
 ---
 

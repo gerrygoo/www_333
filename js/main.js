@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const VERSION = '2.0.0';
+const VERSION = '2.0.1';
 
 const CONFIG = {
     GLITCH_WAIT_MIN: 400,
@@ -1522,7 +1522,8 @@ async function initWorld() {
         }
         world.keys[k] = true;
         if (k === 'e' || k === 'enter') interact();
-        if ((k === 'q' || k === 'c') && world.mode === 'sitting') standUp();
+        const standKeys = ['q', 'c', ' ', 'w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'];
+        if (world.mode === 'sitting' && standKeys.includes(k)) { e.preventDefault(); world.keys = {}; standUp(); }
         if (k === 'f') world.flashlightOn = !world.flashlightOn;
         if (k === 'm' && audio) { world.muted = !world.muted; audio.setMuted(world.muted); }
     });
@@ -1533,8 +1534,13 @@ async function initWorld() {
         if (document.pointerLockElement !== canvas) return;
         look(e.movementX, e.movementY, 0.0022);
     });
-    canvas.addEventListener('mousedown', () => {
-        if (document.pointerLockElement === canvas) { interact(); return; }
+    canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+    canvas.addEventListener('mousedown', (e) => {
+        if (document.pointerLockElement === canvas) {
+            if (e.button === 2) { if (world.mode === 'sitting') standUp(); return; }
+            interact();
+            return;
+        }
         // e.g. back from the tape via Esc — Esc can't grant pointer lock, a click can
         if (!world.isTouch && body.classList.contains('is-playing')) {
             const pr = canvas.requestPointerLock();
@@ -1584,9 +1590,8 @@ async function initWorld() {
                 if (t.identifier === T.lookId) T.lookId = null;
             }
         });
-        touchAct.addEventListener('click', () => {
-            if (world.mode === 'sitting' && world.touchStand) standUp(); else interact();
-        });
+        touchAct.addEventListener('click', interact);
+        document.getElementById('touch-stand').addEventListener('click', () => { if (world.mode === 'sitting') standUp(); });
     }
 
     /* ----- loop ----- */
@@ -1702,8 +1707,9 @@ async function initWorld() {
             else if (world.focus === 'tv') setPrompt('...');
             else setPrompt('');
         } else if (world.mode === 'sitting') {
-            world.touchStand = false;
-            setPrompt(world.isTouch ? 'WATCH' : '[E] WATCH        [Q] STAND');
+            if (world.isTouch) setPrompt('WATCH');
+            else if (document.pointerLockElement !== canvas) setPrompt('[CLICK] TO LOOK AROUND\n[E] WATCH        [Q] STAND');
+            else setPrompt('[E] WATCH        [Q] STAND');
         } else {
             setPrompt('');
         }

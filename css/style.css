@@ -435,21 +435,6 @@ body.is-playing .gate,
 body.is-watching .gate { display: none; }
 
 .gate__inner { max-width: 640px; }
-.gate__title {
-    font-family: 'Terminal Grotesque', "Courier New", monospace;
-    font-size: clamp(2rem, 7vw, 4rem);
-    line-height: 1;
-    margin: 0 0 0.5rem;
-    filter: url(#rgb-split);
-    animation: shake 4.3s infinite;
-}
-.gate__sub {
-    margin: 0 0 2.5rem;
-    opacity: 0.6;
-    font-size: 0.9rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
 .gate__enter,
 .gate__skip,
 .site__leave {
@@ -532,6 +517,20 @@ body.is-touch.is-playing .touch { display: block; }
     opacity: 0.3;
 }
 .touch__act.is-ready { opacity: 1; }
+.touch__stand {
+    display: none;
+    position: fixed;
+    right: 28px;
+    bottom: 128px;
+    z-index: 25;
+    background: none;
+    border: 1px solid #fff;
+    color: #fff;
+    font-family: 'Terminal Grotesque', monospace;
+    font-size: 22px;
+    padding: 6px 12px;
+}
+body.is-sitting .touch__stand { display: block; }
 
 /* --- The tape (original landing page) --- */
 .site {
